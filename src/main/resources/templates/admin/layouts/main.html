@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css"
           th:each="cssFile : ${addCss}" th:href="@{/admin/css/{file}.css(file=${cssFile})}">
 
+    <th:block layout:fragment="addCss"></th:block>
+
 
     <script th:src="@{/common/js/common.js}"></script>
     <script th:each="jsFile : ${addCommonScript}"
@@ -22,8 +24,14 @@
     <script th:each="jsFile : ${addScript}"
             th:src="@{/admin/js/{file}.js(file=${jsFile})}"></script>
 
+    <th:block layout:fragment="addScript"></th:block>
+
 </head>
 <body>
+    <header th:replace="~{admin/outlines/header::common}"></header>
 
+    <main layout:fragment="content"></main>
+
+    <footer th:replace="~{admin/outlines/footer::common}"></footer>
 </body>
 </html>
