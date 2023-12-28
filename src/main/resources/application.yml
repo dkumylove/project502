@@ -1,0 +1,59 @@
+server:
+  port: 3000
+
+spring:
+  profiles:
+    active: dev
+
+  # 파일 업로드 설정
+  servlet:
+    multipart:
+      maxFileSize: 20MB     # 파일한개당 최대용량
+      maxRequestSize: 60MB      # 한번에 업로드할수 있는 최대용량
+
+  # 데이터베이스 설정
+  datasource:
+    driverClassName: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:myoracle
+    username: PROJECT
+    password: _aA123456
+
+  # JPA 설정
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect      # DB툴에 맞게 쿼리를 자동으로 바꿔줌
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddlAuto: create  #update  #DDL 데이터 정의어 : 데이터 구조를 만드는 쿼리문 자동 정의(태이블생성필요없음)
+
+  # 라이브 리로드 설정(브라우저에서 애플리케이션을 다시 로드 : 변경 사항을 실시간으로 확인)
+  devtools:
+    livereload:
+      enabled: true
+
+  # 타임리프 설정
+  thymeleaf:
+    cache: false      # 캐시가 true이면 리로드 작동 안함
+    prefix: file:src/main/resources/templates/
+
+  # 정적 자원 설정(CSS, JS, 이미지)
+  web:
+    resources:
+      staticLocations: file:src/main/resources/static/
+
+# 로거 설정
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+
+# 파일 업로드 경로 설정
+file:
+  url: /upload/
+  path: C:/app/spring/uploads/
