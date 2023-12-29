@@ -14,20 +14,22 @@ public class CommonController {
     @ExceptionHandler(Exception.class)
     public String errorHandler(Exception e, HttpServletResponse response, HttpServletRequest request, Model model) {
 
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;   // 500
-        if(e instanceof CommonException) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR; // 500
+
+        if (e instanceof CommonException) {
             CommonException commonException = (CommonException) e;
             status = commonException.getStatus();
         }
 
         response.setStatus(status.value());
+
         e.printStackTrace();
+
         model.addAttribute("status", status.value());
         model.addAttribute("path", request.getRequestURI());
-        model.addAttribute("message", e.getMessage());
         model.addAttribute("method", request.getMethod());
+        model.addAttribute("message", e.getMessage());
+
         return "error/common";
     }
-
-
 }

@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableConfigurationProperties(FileProperties.class)
 public class MvcConfig implements WebMvcConfigurer {
 
-
     @Autowired
     private FileProperties fileProperties;
 
@@ -22,7 +21,7 @@ public class MvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(fileProperties.getUrl() + "**") // 현재 경로를 포함 하위 모든 파일
+        registry.addResourceHandler(fileProperties.getUrl() + "**")
                 .addResourceLocations("file:///" + fileProperties.getPath());
     }
 
@@ -38,7 +37,5 @@ public class MvcConfig implements WebMvcConfigurer {
 
         return ms;
     }
-
-
 
 }

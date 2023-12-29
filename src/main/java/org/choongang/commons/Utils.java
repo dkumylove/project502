@@ -17,12 +17,11 @@ public class Utils {
      * 모바일인지 확인하는 편의기능
      */
     public boolean isMobile() {
-        // 모바일 수동 모드 전화 체크
-        String device = (String)seesion.getAttribute("device");
+        // 모바일 수동 전환 모드 체크
+        String device = (String)session.getAttribute("device");
         if (StringUtils.hasText(device)) {
             return device.equals("MOBILE");
         }
-
 
         // 요청 헤더 : User-Agent
         String ua = request.getHeader("User-Agent");
@@ -36,6 +35,5 @@ public class Utils {
         String prefix = isMobile() ? "mobile/" : "front/";
 
         return prefix + path;
-
     }
 }

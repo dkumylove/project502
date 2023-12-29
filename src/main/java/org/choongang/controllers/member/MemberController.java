@@ -16,6 +16,6 @@ public class MemberController {
     @GetMapping("/join")
     public String join() {
 
-        return utils.tpl("/member/join");
+        return utils.tpl("member/join");
     }
 }
