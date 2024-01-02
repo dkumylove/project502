@@ -1,7 +1,8 @@
-package org.choongang.entities;
+package org.choongang.member.entities;
 
 import jakarta.persistence.Entity;
 import lombok.Data;
+import org.choongang.commons.entities.Base;
 
 @Data
 @Entity
