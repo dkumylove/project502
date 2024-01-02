@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * Rest 컨트롤러 예외처리
+ */
 public interface ExceptionRestProcessor {
 
     @ExceptionHandler(Exception.class)
