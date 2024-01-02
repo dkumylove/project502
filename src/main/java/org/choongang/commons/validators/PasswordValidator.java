@@ -11,8 +11,17 @@ public interface PasswordValidator {
      *      true : 대소문자 구분없이 1개 이상 포함
      * @return
      */
-    default boolean alphaCheck(String passwprd, boolean caseIncensitive) {
+    default boolean alphaCheck(String password, boolean caseIncensitive) {
+        if(caseIncensitive) { // 대소문자 구분 없이 체크
+            String pattern = ".*[a-zA-Z]+.*";
 
+            return password.matches(pattern);
+        } else { // 대문자 1개, 소문자 1개 포함
+            String pattern1 = ".*[a-z]+.*";
+            String pattern2 = ".*[A-Z]+.*";
+
+            return password.matches(pattern1) && password.matches(pattern2);
+        }
     }
 
     /**
@@ -21,7 +30,8 @@ public interface PasswordValidator {
      * @return
      */
     default boolean numberCheck(String password){
-
+        //return password.matches(".*[0-9]+.*");
+        return password.matches(".*\\d+.*");
     }
 
     /**
@@ -30,6 +40,8 @@ public interface PasswordValidator {
      * @return
      */
     default boolean specialcharsCheck(String password){
+        String pattern = ".*[`~!@#$%^&*()-_+=]+.*";
 
+        return password.matches(pattern);
     }
 }
