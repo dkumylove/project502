@@ -18,7 +18,7 @@ public class LoginFailurdHandler implements AuthenticationFailureHandler {
 
         HttpSession session = request.getSession();
 
-        // 세션로그인 실페 메시지 일괄 삭제
+        // 세션로그인 실패 메시지 일괄 삭제
         MemberUtil.clearLoginData(session);
 
         // error 메시지 출력
