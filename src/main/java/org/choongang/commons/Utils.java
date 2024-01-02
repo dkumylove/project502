@@ -61,6 +61,8 @@ public class Utils {
         if(type.equals("commons")) {
             bundle = commonsBundle;
         } else if (type.equals("errors")) {
+            bundle = errorsBundle;
+        } else {
             bundle = validationsBundle;
         }
 
