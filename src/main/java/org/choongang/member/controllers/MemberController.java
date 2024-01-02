@@ -4,12 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
+import org.choongang.member.service.JoinService;
+import org.choongang.member.service.MemberInfo;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController implements ExceptionProcessor {
 
     private final Utils utils;
+    //private final JoinValidator joinValidator;
+    private final JoinService joinService;
 
     @GetMapping("/join")
     public String join(@ModelAttribute RequestJoin form) {
@@ -28,6 +30,8 @@ public class MemberController implements ExceptionProcessor {
 
     @PostMapping("/join")
     public String joinPs(@Valid RequestJoin form, Errors errors) {
+
+        joinService.process(form, errors);
 
         if(errors.hasErrors()) {
             return utils.tpl("member/join");
@@ -40,4 +44,32 @@ public class MemberController implements ExceptionProcessor {
     public String login() {
         return utils.tpl("member/login");
     }
+
+    /*
+    @GetMapping("/info")
+    @ResponseBody
+    public void info(Principal principal) {
+        String username = principal.getName();
+        System.out.printf("username = %s%n", username);
+    }
+    */
+
+    /*
+    @GetMapping("/info")
+    @ResponseBody
+    public void info(@AuthenticationPrincipal MemberInfo memberInfo) {
+        System.out.println("memberInfo = " + memberInfo);
+    }
+    */
+
+    @GetMapping("/info")
+    @ResponseBody
+    public void info() {
+        MemberInfo memberInfo = (MemberInfo) SecurityContextHolder
+                .getContext()
+                .getAuthentication()  // 로그인 정보가 담겨있는 객체
+                .getPrincipal();
+        System.out.println("memberInfo = " + memberInfo);
+    }
+
 }
