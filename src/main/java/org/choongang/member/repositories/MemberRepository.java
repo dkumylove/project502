@@ -8,9 +8,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member> {
-
     Optional<Member> findByEmail(String email);
-
     Optional<Member> findByUserId(String userId);
 
     default boolean existsByEmail(String email) {
@@ -24,5 +22,4 @@ public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslP
 
         return exists(member.userId.eq(userId));
     }
-
 }

@@ -3,7 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
-
     <h1 th:text="#{회원가입}"></h1>
 
     <form name="frmJoin" method="post" th:action="@{/member/join}" autocomplete="off" th:object="${requestJoin}">
@@ -58,7 +57,6 @@
             <div class="error" th:each="err : ${#fields.errors('agree')}" th:text="${err}"></div>
         </div>
         <button type="submit" th:text="#{가입하기}"></button>
-
     </form>
 </main>
 </html>
