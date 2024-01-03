@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css}">
     <link rel="stylesheet" type="text/css"
           th:each="cssFile : ${addCommonCss}" th:href="@{/common/css/{file}.css(file=${cssFile})}">
@@ -35,6 +36,6 @@
         <section layout:fragment="content"></section>
     </main>
 
-    <footer th:replace="~{admin/outlines/footer::common}"></footer>
+    <!--<footer th:replace="~{admin/outlines/footer::common}"></footer>-->
 </body>
 </html>
