@@ -29,5 +29,4 @@ public class RequestJoin {
     @AssertTrue // 참값 확인
     private boolean agree;
 
-
 }
