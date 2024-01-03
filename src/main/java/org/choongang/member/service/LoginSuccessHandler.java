@@ -34,5 +34,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String redirectURL = request.getParameter("redirectURL");
         redirectURL = StringUtils.hasText(redirectURL) ? redirectURL : "/";
 
+        response.sendRedirect(request.getContextPath() + redirectURL);
     }
 }

@@ -24,7 +24,7 @@ public class MemberUtil {
      * @return
      */
     public Member getMember() {
-        Member member = (Member) session.getAttribute("mamber");
+        Member member = (Member) session.getAttribute("member");
         return member;
     }
     
