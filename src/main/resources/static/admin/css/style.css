@@ -24,7 +24,7 @@ header .btn_area a:last-of-type { background: slateblue ; color: thistle}
 
 main { background: lavender  ; min-height: 1000px; display: flex;}
 main > aside { width: 208px; background: mediumpurple }
-main > section { flex-grow: 1; }
+main > section { flex-grow: 1; padding: 50px;}
 
 main > aside > a { display: block; height: 71px; color: lavender; font-size: 1.385rem;
     text-align: center; line-height: 70px; position: relative;}
@@ -37,4 +37,33 @@ main > aside > a.on:after, main > aside > a:hover:after { content:''; display:bl
 nav.submenus { box-shadow: 1px 1px 5px #cdced5; height: 60px; background: #fff; border-radius: 5px; margin-bottom: 50px; display: flex; align-items: center; }
 nav.submenus a { height: 60px; line-height: 60px; padding: 0 40px; font-size: 1.385rem; color: #222; }
 nav.submenus a.on { background: darkslateblue; color: #fff; font-weight: 500; }
+
 /* 내용영역 e */
+
+/* 제목 공통 s */
+h1 { margin: 0; padding: 0 0 20px 10px; line-height: 1; font-size: 2rem; border-bottom: 2px solid #222; margin-bottom: 30px;}
+h2 { margin: 0 0 10px 0; font-size: 1.385rem; line-height: 1; }
+/* 제목 공통 e */
+
+/* 테이블 공통 s */
+
+.table_cols { border-spacing: 0; width: 100%; border-top: 2px solid #222; background: #ffffff }
+.table_cols th, .table_cols td {padding: 10px; border-bottom: 1px solid #d5d5d5;}
+.table_cols th { background: thistle  ; font-weight: normal;}
+
+/* 테이블 공통 e */
+
+/* 입력 공통 s */
+input[type='text'],
+input[type='number'],
+input[type='email'],
+input[type='password'] { border: 1px solid #d5d5d5; height: 35px; padding: 0 10px; width: 100%; }
+textarea { border: 1px solid #d5d5d5; min-height: 200px; padding: 10px; resize: none; width: 100%; }
+select { border: 1px solid #d5d5d5; height: 35px;}
+/* 입력 공통 e */
+
+/* 버튼 공통 s */
+.submit_btns {text-align: center; margin: 30px 0;}
+.submit_btns .btn { display: inline-block; min-width: 200px; height: 45px; padding: 0 15px; border: 1px solid #222; background: #fff; font-size: 1.3rem; font-weight: 500; color: #222222; border-radius: 3px; cursor: pointer; line-height: 43px; }
+.submit_btns .btn:last-of-type { background: darkslateblue; color: lavender }
+/* 버튼 공통 e */
