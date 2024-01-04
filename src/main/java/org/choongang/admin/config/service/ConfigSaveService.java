@@ -19,6 +19,8 @@ public class ConfigSaveService {
         /**
          * 데이터가 있으면 데이터를 가져오고, 없은면 새롭게 생성
          * findById : Optional 형태로 반환 : 자동 null 처리
+         * jsonString : JSON 문자열
+         * writeValueAsString : 자바 객체를 문자열로 바꾸주는 메서드
          */
         Configs configs = repository.findById(code).orElseGet(Configs::new);
 

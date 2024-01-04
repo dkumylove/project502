@@ -34,6 +34,15 @@ public class ConfigInfoService {
      * @param <T>
      */
     public <T> Optional<T> get(String code, Class<T> clazz, TypeReference<T> typeReference) {
+
+        /**
+         * Class<T> clazz : 단일 클래스일떄
+         * TypeReference<T> typeReference : 복잡한 형태 (Map, List, 중첩, 컬랙션 등)
+         * Optional : null처리함
+         * jsonString : JSON 문자열
+         * readValue : 문자열을 자바 객체로 변경
+         */
+
         Configs config = repository.findById(code).orElse(null);
         if(config == null || !StringUtils.hasText(config.getData())) {
             return Optional.ofNullable(null);
