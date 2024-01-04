@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BeseMember extends Base {
+public abstract class BaseMember extends Base {
 
     @CreatedBy
     @Column(length = 40, updatable = false)  // 업데이트할때 변경되면 안됨

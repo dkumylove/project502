@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
-
     private final BoardDataRepository boardDataRepository;
 
     @ResponseBody
@@ -28,15 +27,14 @@ public class BoardController {
         data.setSubject("제목");
         data.setContent("내용");
         boardDataRepository.saveAndFlush(data);
-
          */
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/test2")
     @ResponseBody
+    @GetMapping("/test2")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    //@Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     public void test2() {
-        System.out.println("test2===============");
+        System.out.println("test2 ================");
     }
-
 }

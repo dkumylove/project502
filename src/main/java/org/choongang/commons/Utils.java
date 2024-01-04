@@ -72,4 +72,15 @@ public class Utils {
     public static String getMessage(String code) {
         return  getMessage(code, null);
     }
+
+
+    /**
+     * 줄 개행
+     * \n 또는 \r\n -> <br>
+     */
+    public String nl2br(String str) {
+        str = str.replaceAll("\\n", "<br>")
+                .replaceAll("\\r", "");
+        return str;
+    }
 }

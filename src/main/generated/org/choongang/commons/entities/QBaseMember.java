@@ -10,14 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QBeseMember is a Querydsl query type for BeseMember
+ * QBaseMember is a Querydsl query type for BaseMember
  */
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
-public class QBeseMember extends EntityPathBase<BeseMember> {
+public class QBaseMember extends EntityPathBase<BaseMember> {
 
-    private static final long serialVersionUID = -1209765030L;
+    private static final long serialVersionUID = 1725085526L;
 
-    public static final QBeseMember beseMember = new QBeseMember("beseMember");
+    public static final QBaseMember baseMember = new QBaseMember("baseMember");
 
     public final QBase _super = new QBase(this);
 
@@ -31,16 +31,16 @@ public class QBeseMember extends EntityPathBase<BeseMember> {
 
     public final StringPath modifiedBy = createString("modifiedBy");
 
-    public QBeseMember(String variable) {
-        super(BeseMember.class, forVariable(variable));
+    public QBaseMember(String variable) {
+        super(BaseMember.class, forVariable(variable));
     }
 
-    public QBeseMember(Path<? extends BeseMember> path) {
+    public QBaseMember(Path<? extends BaseMember> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QBeseMember(PathMetadata metadata) {
-        super(BeseMember.class, metadata);
+    public QBaseMember(PathMetadata metadata) {
+        super(BaseMember.class, metadata);
     }
 
 }
