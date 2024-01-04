@@ -12,6 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -36,11 +37,11 @@ public class ConfigSaveTest {
 
         saveService.save("basic", config);
         
-        BasicConfig config2 = infoService.get("basic", BasicConfig.class);
+        BasicConfig config2 = infoService.get("basic", BasicConfig.class).get();
         System.out.println("config2 = " + config2);
 
-        Map<String, String> config3 = infoService.get("basic", new TypeReference<>() {});
-        System.out.println("config3 = " + config3);
+        Optional<Map<String, String>> opt = infoService.get("basic", new TypeReference<>() {});
+        System.out.println("opt = " + opt.get());
     }
 
 }
