@@ -14,23 +14,23 @@
     <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css?{v}(v=${siteConfig.cssJsVersion})}">
     <link rel="stylesheet" type="text/css"
           th:each="cssFile : ${addCommonCss}"
-          th:href="@{/common/css/{file}.css(file=${cssFile})}">
+          th:href="@{/common/css/{file}.css?v={v}(file=${cssFile}, v=${siteConfig.cssJsVersion})}">
 
     <link rel="stylesheet" type="text/css" th:href="@{/admin/css/style.css?{v}(v=${siteConfig.cssJsVersion})}">
     <link rel="stylesheet" type="text/css"
           th:each="cssFile : ${addCss}"
-          th:href="@{/admin/css/{file}.css(file=${cssFile})}">
+          th:href="@{/common/css/{file}.css?v={v}(file=${cssFile}, v=${siteConfig.cssJsVersion})}">
 
     <th:block layout:fragment="addCss"></th:block>
 
 
     <script th:src="@{/common/js/common.js?{v}(v=${siteConfig.cssJsVersion})}"></script>
     <script th:each="jsFile : ${addCommonScript}"
-            th:src="@{/common/js/{file}.js(file=${jsFile})}"></script>
+            th:src="@{/common/js/{file}.js?v={v}(file=${jsFile}, v=${siteConfig.cssJsVersion})}"></script>
 
     <script th:src="@{/admin/js/common.js?{v}(v=${siteConfig.cssJsVersion})}"></script>
     <script th:each="jsFile : ${addScript}"
-            th:src="@{/admin/js/{file}.js(file=${jsFile})}"></script>
+            th:src="@{/common/js/{file}.js?v={v}(file=${jsFile}, v=${siteConfig.cssJsVersion})}"></script>
 
     <th:block layout:fragment="addScript"></th:block>
 
