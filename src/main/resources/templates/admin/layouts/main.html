@@ -8,11 +8,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css}">
     <link rel="stylesheet" type="text/css"
-          th:each="cssFile : ${addCommonCss}" th:href="@{/common/css/{file}.css(file=${cssFile})}">
+          th:each="cssFile : ${addCommonCss}"
+          th:href="@{/common/css/{file}.css(file=${cssFile})}">
 
     <link rel="stylesheet" type="text/css" th:href="@{/admin/css/style.css}">
     <link rel="stylesheet" type="text/css"
-          th:each="cssFile : ${addCss}" th:href="@{/admin/css/{file}.css(file=${cssFile})}">
+          th:each="cssFile : ${addCss}"
+          th:href="@{/admin/css/{file}.css(file=${cssFile})}">
 
     <th:block layout:fragment="addCss"></th:block>
 
@@ -33,7 +35,10 @@
 
     <main>
         <aside th:replace="~{admin/outlines/_side::munus}"></aside>
-        <section layout:fragment="content"></section>
+        <section>
+            <nav th:replace="~{admin/outlines/_submenu::submenus}"></nav>
+            <section layout:fragment="content"></section>
+        </section>
     </main>
 
     <!--<footer th:replace="~{admin/outlines/footer::common}"></footer>-->

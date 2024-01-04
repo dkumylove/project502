@@ -38,16 +38,18 @@ public class SecurityConfig {
         /* 인증설정 E - 로그인, 로그아웃 */
 
         /* 인가설정 S - 접근 통제 */
-        // hasAuthority(..), hasAnyAuthority(..), hasRole, hasAnyRole
+        // hasAuthority(..) hasAnyAuthority(...), hasRole, hasAnyRole
         // ROLE_롤명칭
         // hasAuthority('ADMIN')
         // ROLE_ADMIN -> hasAuthority('ROLE_ADMIN')
         // hasRole('ADMIN')
         http.authorizeHttpRequests(c -> {
-            c.requestMatchers("/mypage/**").authenticated()  // 회원전용
+            c.requestMatchers("/mypage/**").authenticated() // 회원 전용
                     //.requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "MANAGER")
-                    .anyRequest().permitAll();  // 그외 모든 페이지는 모두 접근 가능
+                    .anyRequest().permitAll(); // 그외 모든 페이지는 모두 접근 가능
         });
+
+
 
         http.exceptionHandling(c -> {
 //           c.authenticationEntryPoint(new AuthenticationEntryPoint() {

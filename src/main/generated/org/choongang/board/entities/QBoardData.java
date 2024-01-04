@@ -19,7 +19,7 @@ public class QBoardData extends EntityPathBase<BoardData> {
 
     public static final QBoardData boardData = new QBoardData("boardData");
 
-    public final org.choongang.commons.entities.QBeseMember _super = new org.choongang.commons.entities.QBeseMember(this);
+    public final org.choongang.commons.entities.QBaseMember _super = new org.choongang.commons.entities.QBaseMember(this);
 
     public final StringPath content = createString("content");
 
