@@ -15,7 +15,6 @@ import java.util.List;
 
 /**
  * rest 컨트롤러 : API 붙여서 통일
- *
  */
 
 @RestController
@@ -27,13 +26,11 @@ public class ApiFileController implements ExceptionRestProcessor {
 
     @PostMapping
     public JSONData<List<FileInfo>> upload(@RequestParam("file") MultipartFile[] files,
-                           @RequestParam(name = "gid", required = false)String gid,
-                           @RequestParam(name = "location", required = false) String location) {
-        uploadService.upload(files, gid, location);
+                                           @RequestParam(name="gid", required = false) String gid,
+                                           @RequestParam(name="location", required = false) String location) {
 
         List<FileInfo> uploadedFiles = uploadService.upload(files, gid, location);
 
         return new JSONData<>(uploadedFiles);
     }
-
 }

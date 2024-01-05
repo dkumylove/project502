@@ -3,9 +3,12 @@ package org.choongang.commons;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.choongang.admin.config.controllers.BasicConfig;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
@@ -73,7 +76,6 @@ public class Utils {
         return  getMessage(code, null);
     }
 
-
     /**
      * 줄 개행
      * \n 또는 \r\n -> <br>
@@ -83,4 +85,17 @@ public class Utils {
                 .replaceAll("\\r", "");
         return str;
     }
+
+    /**
+     * 썸네일 이미지 사이즈 설정
+     */
+    public List<int[]> getThumbSize() {
+        BasicConfig config = (BasicConfig) request.getAttribute("siteConfig");
+        String thumbSize = config.getThumbSize();  // \r\n
+        String[] thumbsSize = thumbSize.split("\\n"); // 자르기
+        Arrays.stream(thumbsSize).map(s -> s.replaceAll("\\r", ""))
+                .map(s ->s.toUpperCase().split("X"));
+        return null;
+    }
+
 }
