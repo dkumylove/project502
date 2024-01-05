@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.domain.Sort.Order.asc;
@@ -57,7 +59,6 @@ public class FileInfoService {
 
         if(!mode.equals("ALL")) {
             builder.and(fileInfo.done.eq(mode.equals("DONE")));
-
         }
 
         List<FileInfo> items = (List<FileInfo>) repository.findAll(builder, Sort.by(asc("createdAt")));
@@ -93,10 +94,55 @@ public class FileInfoService {
         long dir = seq % 10L;
         String fileName = seq + fileInfo.getExtension();
 
+        /* 파일경로, URL s */
         String filePath = fileProperties.getPath() + dir + "/" + fileName;
         String fileUrl = request.getContextPath() + fileProperties.getUrl() + dir + "/" + fileName;
 
         fileInfo.setFilePath(filePath);
         fileInfo.setFileUrl(fileUrl);
+        /* 파일경로, URL e */
+
+        /* 썸네일 경로, URL s */
+        List<String> thumbsPath = new ArrayList<>();
+        List<String> thumbsUrl = new ArrayList<>();
+
+        String thumbDirCommon = "thumbs/" + dir + "/" + seq;
+
+        String thumbDir = fileProperties.getPath() + thumbDirCommon;
+        String thumbUrl = fileProperties.getUrl() + thumbDirCommon;
+
+        File _thumbDir =  new File(thumbDir);
+        if(_thumbDir.exists()){
+            for(String thumbFileName : _thumbDir.list()) {
+                thumbsPath.add(thumbDir + "/" + thumbFileName);
+                thumbsUrl.add(thumbUrl + "/" + thumbFileName);
+            }
+        }  //end if
+
+        fileInfo.setThumbsPath(thumbsPath);
+        fileInfo.setThumbsUrl(thumbsUrl);
+        /* 썸네일 경로, URL e */
     }
+
+    /**
+     * 파일 특정 사이즈 썸네일 조회
+     *
+     * @param seq
+     * @param width
+     * @param height
+     * @return
+     */
+    public String[] getThumb(Long seq, int width, int height) {
+
+    }
+
+
+    public String getThumbDir(Long seq) {
+
+    }
+
+    public String getThumbUrl(Long seq) {
+
+    }
+
 }

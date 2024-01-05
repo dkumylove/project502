@@ -85,14 +85,15 @@ public class FileUploadService {
             File uploadFile = new File(dir, seq + extension);
             try {
                 file.transferTo(uploadFile);
+
                 /* 썸네일 이미지 처리 s */
                 if (fileType.indexOf("image/") != -1 && thumbsSize != null) {
-                    File thumbDir = new File(thumbPath + dir);
+                    File thumbDir = new File(thumbPath + (seq % 10L) + "/" + seq);
                     if(!thumbDir.exists()) {
                         thumbDir.mkdirs();
                     }
                     for(int[] sizes : thumbsSize) {
-                        String thumbFileName = sizes[0] + "_" + sizes[1] + "_" + fileName;
+                        String thumbFileName = sizes[0] + "_" + sizes[1] + "_" + seq + extension;
 
                         File thumb = new File(thumbDir, thumbFileName);
                         Thumbnails.of(uploadFile)

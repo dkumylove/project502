@@ -94,8 +94,10 @@ public class Utils {
         String thumbSize = config.getThumbSize();  // \r\n
         String[] thumbsSize = thumbSize.split("\\n"); // 자르기
 
-        List<int[]> data = Arrays.stream(thumbsSize).map(this::toConvert).toList();
-        return null;
+        List<int[]> data = Arrays.stream(thumbsSize).filter(StringUtils::hasText)
+                .map(s -> s.replaceAll("\\s+", "")).map(this::toConvert).toList();
+
+        return data;
     }
 
     public int[] toConvert(String size) {
