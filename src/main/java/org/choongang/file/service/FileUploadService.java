@@ -1,6 +1,8 @@
 package org.choongang.file.service;
 
+
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.choongang.commons.Utils;
 import org.choongang.configs.FileProperties;
 import org.choongang.file.entities.FileInfo;
@@ -35,9 +37,15 @@ public class FileUploadService {
 
         gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
 
-        // 기본 경로
+        //  파일 없로드 기본 경로
         String uploadPath = fileProperties.getPath();
         System.out.println(fileProperties);
+
+        // 썹네일 업로드 기본경로
+        String thumbPath = uploadPath + "thumbs/";
+
+        // 썸네일 사이즈
+        List<int[]> thumbsSize = utils.getThumbSize();
 
         // 업로드 성공 파일 정보 목록
         List<FileInfo> uploadedFiles = new ArrayList<>();
@@ -77,6 +85,24 @@ public class FileUploadService {
             File uploadFile = new File(dir, seq + extension);
             try {
                 file.transferTo(uploadFile);
+                /* 썸네일 이미지 처리 s */
+                if (fileType.indexOf("image/") != -1 && thumbsSize != null) {
+                    File thumbDir = new File(thumbPath + dir);
+                    if(!thumbDir.exists()) {
+                        thumbDir.mkdirs();
+                    }
+                    for(int[] sizes : thumbsSize) {
+                        String thumbFileName = sizes[0] + "_" + sizes[1] + "_" + fileName;
+
+                        File thumb = new File(thumbDir, thumbFileName);
+                        Thumbnails.of(uploadFile)
+                                .size(sizes[0], sizes[1])
+                                .toFile(thumb);
+                    }
+                }
+
+                /* 썸네일 이미지 처리 e */
+
                 infoService.addFileInfo(fileInfo);  // 파일 추가 정보 처리
                 uploadedFiles.add(fileInfo);  // 업로드 성공시 파일 정보 추가
             } catch (IOException e) {

@@ -93,9 +93,18 @@ public class Utils {
         BasicConfig config = (BasicConfig) request.getAttribute("siteConfig");
         String thumbSize = config.getThumbSize();  // \r\n
         String[] thumbsSize = thumbSize.split("\\n"); // 자르기
-        Arrays.stream(thumbsSize).map(s -> s.replaceAll("\\r", ""))
-                .map(s ->s.toUpperCase().split("X"));
+
+        List<int[]> data = Arrays.stream(thumbsSize).map(this::toConvert).toList();
         return null;
+    }
+
+    public int[] toConvert(String size) {
+
+        size = size.trim();
+
+        int[] data = Arrays.stream(size.replaceAll("\\r", "").toUpperCase().split("X")).mapToInt(Integer::parseInt).toArray();
+
+        return data;
     }
 
 }
