@@ -29,7 +29,7 @@ public class FileUploadService {
     private final Utils utils;
 
     // DB에 올라가면, 파일을 리스트 형태로 반환값 만듬
-    public List<FileInfo> upload(MultipartFile[] files, String gid, String location) {
+    public List<FileInfo> upload(MultipartFile[] files, String gid, String location, boolean imageOnly) {
         /**
          * 1. 파일 정보 저장
          * 2. 서버쪽에 파일 업로드 처리
@@ -62,6 +62,10 @@ public class FileUploadService {
 
             // 파일종류 ex) image/...
             String fileType = file.getContentType();
+            // 이미지만 업로드 하는 경우, 이미지가 아닌 형식은 업로드 베제
+            if(imageOnly && fileType.indexOf("image/") == -1) {
+                continue;
+            }
 
             FileInfo fileInfo = FileInfo.builder()
                     .gid(gid)
