@@ -33,6 +33,8 @@ public class QFileInfo extends EntityPathBase<FileInfo> {
 
     public final StringPath fileName = createString("fileName");
 
+    public final StringPath fileType = createString("fileType");
+
     public final StringPath gid = createString("gid");
 
     public final StringPath location = createString("location");

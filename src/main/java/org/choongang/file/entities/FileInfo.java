@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.choongang.commons.entities.BaseMember;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -41,6 +42,21 @@ public class FileInfo extends BaseMember {
 
     @Column(length = 30)
     private String extension;  // 확장자
+
+    @Column(length = 65)
+    private String fileType;  // 파일 타입
+
+    @Transient  // 내부에서만 사용
+    private String filePath;  // 서버에 실제 올라간 경로
+
+    @Transient  // 내부에서만 사용
+    private String fileUrl;  // 브라우저 주소창에 입력해서 접근 할 수 있는 경로
+
+    @Transient  // 내부에서만 사용
+    private List<String> thumbsPath;  // 썸네일 이미지 경로
+
+    @Transient  // 내부에서만 사용
+    private List<String> thumbsUrl;   // 브라우저 주소창에 입력해서 접근할 수 있는 경로
 
     private boolean done;  // 작업 완료 유무
 
