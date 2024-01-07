@@ -58,6 +58,8 @@ dependencies {
 	/* Thumbnailator(썸네일) */
 	implementation 'net.coobird:thumbnailator:0.4.20'
 
+	/* email */
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	/* test */
 	testRuntimeOnly 'com.h2database:h2'
