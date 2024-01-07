@@ -55,5 +55,6 @@ logging:
 
 # 파일 업로드 경로 설정
 file:
-  url: /upload/
-  path: C:/app/spring/uploads/
+  upload:
+    url: /upload/
+    path: C:/app/spring/uploads/

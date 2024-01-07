@@ -17,6 +17,7 @@ import java.util.Optional;
 public class ConfigInfoService {
 
     private final ConfigsRepository repository;
+
     public <T> Optional<T> get(String code, Class<T> clazz) {
         return get(code, clazz, null);
     }
@@ -24,7 +25,6 @@ public class ConfigInfoService {
     public <T> Optional<T> get(String code, TypeReference<T> typeReference) {
         return get(code, null, typeReference);
     }
-
     /**
      * 제네릭 사용 이유 : 어떤 값이 올지 알수 없기 떄문
      * 원래의 타입으로 변환 필요
@@ -44,17 +44,18 @@ public class ConfigInfoService {
          */
 
         Configs config = repository.findById(code).orElse(null);
-        if(config == null || !StringUtils.hasText(config.getData())) {
+        if (config == null || !StringUtils.hasText(config.getData())) {
             return Optional.ofNullable(null);
         }
+
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
 
         String jsonString = config.getData();
         try {
             T data = null;
-            if(clazz == null) {  // TypeReference로 처리
-                data= om.readValue(jsonString, new TypeReference<T>() {});
+            if (clazz == null) {  // TypeReference로 처리
+                data = om.readValue(jsonString, new TypeReference<T>() {});
             } else {  // Class로 처리
                 data = om.readValue(jsonString, clazz);
             }

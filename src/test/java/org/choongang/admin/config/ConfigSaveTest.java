@@ -1,4 +1,4 @@
-package org.choongang.admin.config;
+package org.choongang.admin.confg;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.choongang.admin.config.controllers.BasicConfig;
@@ -36,12 +36,14 @@ public class ConfigSaveTest {
         config.setJoinTerms("회원가입 약관");
 
         saveService.save("basic", config);
-        
+
         BasicConfig config2 = infoService.get("basic", BasicConfig.class).get();
-        System.out.println("config2 = " + config2);
+        System.out.println(config2);
 
         Optional<Map<String, String>> opt = infoService.get("basic", new TypeReference<>() {});
-        System.out.println("opt = " + opt.get());
+
+        System.out.println(opt.get());
     }
+
 
 }

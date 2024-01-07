@@ -42,5 +42,6 @@ logging:
 
 # 파일 업로드 경로 설정
 file:
-  url: /upload/
-  path: /home/ubuntu/uploads/
+  upload:
+    url: /upload/
+    path: /home/ubuntu/uploads/
