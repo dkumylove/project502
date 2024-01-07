@@ -14,7 +14,7 @@ public class ConfigSaveService {
 
     private final ConfigsRepository repository;
 
-     public void save(String code, Object data) {
+    public void save(String code, Object data) {
 
         /**
          * 데이터가 있으면 데이터를 가져오고, 없은면 새롭게 생성
@@ -31,11 +31,11 @@ public class ConfigSaveService {
             String jsonString = om.writeValueAsString(data);
             configs.setData(jsonString);
             configs.setCode(code);
+
             repository.saveAndFlush(configs);
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
-
 }

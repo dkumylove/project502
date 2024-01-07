@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class BasicConfigController implements ExceptionProcessor {
 
-    private final ConfigInfoService infoService;
     private final ConfigSaveService saveService;
-
+    private final ConfigInfoService infoService;
 
     @ModelAttribute("menuCode")
     public String getMenuCode() {
-
         return "config";
     }
 
@@ -42,6 +40,7 @@ public class BasicConfigController implements ExceptionProcessor {
         BasicConfig config = infoService.get("basic", BasicConfig.class).orElseGet(BasicConfig::new);
 
         model.addAttribute("basicConfig", config);
+
         return "admin/config/basic";
     }
 
@@ -54,5 +53,4 @@ public class BasicConfigController implements ExceptionProcessor {
 
         return "admin/config/basic";
     }
-
 }

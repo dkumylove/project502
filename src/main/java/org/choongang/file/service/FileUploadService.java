@@ -1,6 +1,5 @@
 package org.choongang.file.service;
 
-
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.choongang.commons.Utils;
@@ -37,33 +36,24 @@ public class FileUploadService {
 
         gid = StringUtils.hasText(gid) ? gid : UUID.randomUUID().toString();
 
-        //  파일 없로드 기본 경로
-        String uploadPath = fileProperties.getPath();
-        System.out.println(fileProperties);
+        String uploadPath = fileProperties.getPath(); // 파일 업로드 기본 경로
+        String thumbPath = uploadPath + "thumbs/"; // 썸네일 업로드 기본 경로
 
-        // 썹네일 업로드 기본경로
-        String thumbPath = uploadPath + "thumbs/";
+        List<int[]> thumbsSize = utils.getThumbSize(); // 썸네일 사이즈
 
-        // 썸네일 사이즈
-        List<int[]> thumbsSize = utils.getThumbSize();
-
-        // 업로드 성공 파일 정보 목록
-        List<FileInfo> uploadedFiles = new ArrayList<>();
+        List<FileInfo> uploadedFiles = new ArrayList<>(); // 업로드 성공 파일 정보 목록
 
         for (MultipartFile file : files) {
+            /* 파일 정보 저장 S */
+            String fileName = file.getOriginalFilename(); // 업로드시 원 파일명
+            // 파일명.확장자   image.png,  image.1.png
 
-            /* 파일정보 저장 s */
-
-            String fileName = file.getOriginalFilename();  // 업로드시 원 파일멍
-            // 파일명.확장자 image.png
-
-            // 확장자 : 원본 파일의 맨뒤에서 .으로 찾은
+            // 확장자
             String extension = fileName.substring(fileName.lastIndexOf("."));
 
-            // 파일종류 ex) image/...
-            String fileType = file.getContentType();
-            // 이미지만 업로드 하는 경우, 이미지가 아닌 형식은 업로드 베제
-            if(imageOnly && fileType.indexOf("image/") == -1) {
+            String fileType = file.getContentType(); // 파일 종류 - 예) image/..
+            // 이미지만 업로드 하는 경우, 이미지가 아닌 형식은 업로드 배제
+            if (imageOnly && fileType.indexOf("image/") == -1) {
                 continue;
             }
 
@@ -76,57 +66,61 @@ public class FileUploadService {
                     .build();
 
             repository.saveAndFlush(fileInfo);
-            /* 1. 파일정보 저장 e */
+            /* 파일 정보 저장 E */
 
-            /* 2. 서버쪽에 파일 업로드 처리 s */
+            /* 파일 업로드 처리 S */
             long seq = fileInfo.getSeq();
             File dir = new File(uploadPath + (seq % 10));
-            if (!dir.exists()) {  // 디렉토리가 없으면 - > 생성
+            if (!dir.exists()) { // 디렉토리가 없으면 -> 생성
                 dir.mkdir();
             }
 
-            // 실제 파일 경로
             File uploadFile = new File(dir, seq + extension);
             try {
                 file.transferTo(uploadFile);
 
-                /* 썸네일 이미지 처리 s */
+                /* 썸네일 이미지 처리 S */
                 if (fileType.indexOf("image/") != -1 && thumbsSize != null) {
                     File thumbDir = new File(thumbPath + (seq % 10L) + "/" + seq);
-                    if(!thumbDir.exists()) {
+                    if (!thumbDir.exists()) {
                         thumbDir.mkdirs();
                     }
-                    for(int[] sizes : thumbsSize) {
+                    for (int[] sizes : thumbsSize) {
                         String thumbFileName = sizes[0] + "_" + sizes[1] + "_" + seq + extension;
 
                         File thumb = new File(thumbDir, thumbFileName);
+
                         Thumbnails.of(uploadFile)
                                 .size(sizes[0], sizes[1])
                                 .toFile(thumb);
                     }
+
                 }
+                /* 썸네일 이미지 처리 E */
 
-                /* 썸네일 이미지 처리 e */
+                infoService.addFileInfo(fileInfo); // 파일 추가 정보 처리
 
-                infoService.addFileInfo(fileInfo);  // 파일 추가 정보 처리
-                uploadedFiles.add(fileInfo);  // 업로드 성공시 파일 정보 추가
+                uploadedFiles.add(fileInfo); // 업로드 성공시 파일 정보 추가
+
             } catch (IOException e) {
                 e.printStackTrace();
                 repository.delete(fileInfo); // 업로드 실패시에는 파일 정보 제거
                 repository.flush();
             }
-            /* 2. 서버쪽에 파일 업로드 처리 e */
+            /* 파일 업로드 처리 E */
         }
+
         return uploadedFiles;
     }
 
     /**
-     * 업로드 완료처리
+     * 업로드 완료 처리
+     *
+     * @param gid
      */
     public void processDone(String gid) {
         List<FileInfo> files = repository.findByGid(gid);
-
-        if(files == null) {
+        if (files == null) {
             return;
         }
 

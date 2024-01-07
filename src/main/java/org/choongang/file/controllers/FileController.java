@@ -1,17 +1,22 @@
 package org.choongang.file.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionProcessor;
+import org.choongang.file.service.FileDeleteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 일반 컨트롤러
  */
-
 @Controller
 @RequestMapping("/file")
-public class FilelController implements ExceptionProcessor {
+@RequiredArgsConstructor
+public class FileController implements ExceptionProcessor {
+
+    private final FileDeleteService deleteService;
 
     @GetMapping("/upload")
     public String upload() {
@@ -19,4 +24,8 @@ public class FilelController implements ExceptionProcessor {
         return "upload";
     }
 
+    @GetMapping("/delete/{seq}")
+    public void delete(@PathVariable("seq") Long seq) {
+        deleteService.delete(seq);
+    }
 }
