@@ -58,6 +58,7 @@ dependencies {
 	/* Thumbnailator(썸네일) */
 	implementation 'net.coobird:thumbnailator:0.4.20'
 
+
 	/* test */
 	testRuntimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
