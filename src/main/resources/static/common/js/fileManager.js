@@ -14,7 +14,7 @@ comminLib.fileManager = {
 
             // gid
             const gidEl = document.querySelector("[name='gid']");
-            if(!gidEl || gidEl.value.trim()) {
+            if(!gidEl || !gidEl.value.trim()) {
                 throw new Error("gid가 누락되었습니다.")
             }
 
