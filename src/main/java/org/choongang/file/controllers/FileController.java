@@ -25,11 +25,11 @@ public class FileController implements ExceptionProcessor {
     private final FileDeleteService deleteService;
     private final FileDownloadService downloadService;
 
-    @GetMapping("/upload")
-    public String upload() {
-
-        return "upload";
-    }
+//    @GetMapping("/upload")
+//    public String upload() {
+//
+//        return "upload";
+//    }
 
     @GetMapping("/delete/{seq}")
     public String delete(@PathVariable("seq") Long seq, Model model) {
