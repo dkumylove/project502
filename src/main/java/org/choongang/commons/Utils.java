@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -82,6 +83,7 @@ public class Utils {
      * \n 또는 \r\n -> <br>
      */
     public String nl2br(String str) {
+        str = Objects.requireNonNullElse(str, "");
         str = str.replaceAll("\\n", "<br>")
                 .replaceAll("\\r", "");
 

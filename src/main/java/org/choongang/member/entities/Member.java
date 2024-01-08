@@ -14,6 +14,9 @@ public class Member extends Base {
     @Id @GeneratedValue
     private Long seq;
 
+    @Column(length=65, nullable = false)
+    private String gid;
+
     @Column(length=80, nullable = false, unique = true)
     private String email;
 
@@ -29,4 +32,7 @@ public class Member extends Base {
     @ToString.Exclude  // 순환참조 방지
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Authorities> authorities = new ArrayList<>();
+
+    @Transient  // 내부사용목적
+    private String profileImage;   // path, url
 }
