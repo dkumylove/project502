@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * 일반적인 컨트롤러 에러를 처리
+ */
 public interface ExceptionProcessor {
 
 
