@@ -74,6 +74,11 @@ public class SecurityConfig {
         });
         /* 인가설정 E - 접근 통제 */
 
+        /**
+         * 같은 출처의 사이트에서는 ifrm 사용할수 있게 허용
+         */
+        http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
+
         return http.build();
     }
 
