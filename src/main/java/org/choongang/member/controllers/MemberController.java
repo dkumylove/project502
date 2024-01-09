@@ -9,10 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
+@SessionAttributes("EmailAuthVerified")
 public class MemberController implements ExceptionProcessor {
 
     private final Utils utils;
@@ -33,11 +32,14 @@ public class MemberController implements ExceptionProcessor {
 
         commonProcess("join", model);
 
+        // 이메일 인증 여부 false로 초기화
+        model.addAttribute("EmailAuthVerified", false);
+
         return utils.tpl("member/join");
     }
 
     @PostMapping("/join")
-    public String joinPs(@Valid RequestJoin form, Errors errors, Model model) {
+    public String joinPs(@Valid RequestJoin form, Errors errors, Model model, SessionStatus sessionStatus) {
 
         commonProcess("join", model);
 
@@ -46,6 +48,8 @@ public class MemberController implements ExceptionProcessor {
         if(errors.hasErrors()) {
             return utils.tpl("member/join");
         }
+        /* EmailAuthVerified 세션값 비우기 */
+        sessionStatus.setComplete();
 
         return "redirect:/member/login";
     }
