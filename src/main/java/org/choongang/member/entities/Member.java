@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 import org.choongang.commons.entities.Base;
+import org.choongang.file.entities.FileInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,5 +35,5 @@ public class Member extends Base {
     private List<Authorities> authorities = new ArrayList<>();
 
     @Transient  // 내부사용목적
-    private String profileImage;   // path, url
+    private FileInfo profileImage;   // path, url
 }
