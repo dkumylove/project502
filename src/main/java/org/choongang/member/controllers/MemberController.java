@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
+import org.choongang.member.service.FindPwService;
 import org.choongang.member.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ public class MemberController implements ExceptionProcessor {
     //private final JoinValidator joinValidator;
     private final JoinService joinService;
     //private final MemberUtil memberUtil;
+    private final FindPwService findPwService;
 
     @GetMapping("/join")
     public String join(@ModelAttribute RequestJoin form, Model model) {
@@ -101,11 +103,59 @@ public class MemberController implements ExceptionProcessor {
     }
     */
 
+
+    /**
+     * 비밀번호 찾기 양식
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/find_pw")
+    public String findPw(@ModelAttribute RequestFindPw form, Model model) {
+        commonProcess("find_pw", model);
+
+        return utils.tpl("member/find_pw");
+    }
+
+    /**
+     * 비밀번호 찾기 처리
+     *
+     * @param model
+     * @return
+     */
+    @PostMapping("/find_pw")
+    public String findPwPs(@Valid RequestFindPw form, Errors errors, Model model) {
+        commonProcess("find_pw", model);
+
+        findPwService.process(form, errors); // 비밀번호 찾기 처리
+
+        if (errors.hasErrors()) {
+            return utils.tpl("member/find_pw");
+        }
+
+        // 비밀번호 찾기에 이상 없다면 완료 페이지로 이동
+        return "redirect:/member/find_pw_done";
+    }
+
+    /**
+     * 비밀번호 찾기 완료 페이지
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/find_pw_done")
+    public String findPwDone(Model model) {
+        commonProcess("find_pw", model);
+
+        return utils.tpl("member/find_pw_done");
+    }
+
     private void commonProcess(String mode, Model model) {
         mode = StringUtils.hasText(mode) ? mode : "join";
         String pageTitle = Utils.getMessage("회원가입", "commons");
 
         List<String> addCommonScript = new ArrayList<>();  // 공통 자바스크립트
+        List<String> addCss = new ArrayList<>();
         List<String> addScript = new ArrayList<>();  // 프론트 자바 스크립트
 
         if(mode.equals("login")) {
@@ -113,10 +163,15 @@ public class MemberController implements ExceptionProcessor {
         } else if (mode.equals("join")) {
             addCommonScript.add("fileManager");
             addScript.add("member/form");
+            addCss.add("member/join");
+            addScript.add("member/join");
         }
 
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addCommonScript", addCommonScript);
+        model.addAttribute("addCss", addCss);
         model.addAttribute("addScript", addScript);
     }
+
+
 }

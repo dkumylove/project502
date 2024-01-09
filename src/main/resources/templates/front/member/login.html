@@ -21,6 +21,7 @@
                 <div class="error" th:if="${session.NotBlank_password != null}" th:text="${session.NotBlank_password}"></div>
             </dd>
         </dl>
+        <a th:href="@{/member/find_pw}" th:text="#{비밀번호_찾기}"></a>
 
         <button type="submit" th:text="#{로그인}"></button>
 
