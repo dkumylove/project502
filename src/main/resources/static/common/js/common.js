@@ -82,4 +82,23 @@ commonLib.ajaxLoad = function(method, url, params, responseType) {
             reject(err);
         };
     });
+};
+
+/**
+ * 위지윗 에디터 로드
+ * @param id
+ * @param height
+ * @returns {*}
+ */
+commonLib.loadEditor = function(id, height) {
+    if (!id) {
+        return;
+    }
+
+    height = height || 450;
+
+    // ClassicEditor
+    return ClassicEditor.create(document.getElementById(id), {
+        height
+    });
 }
