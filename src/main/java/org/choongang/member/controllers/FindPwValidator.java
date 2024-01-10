@@ -1,11 +1,11 @@
 package org.choongang.member.controllers;
 
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.choongang.member.repositories.MemberRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 /**
  * 비밀번호 찾기 추가 검증 처리
@@ -34,4 +34,6 @@ public class FindPwValidator implements Validator {
             errors.reject("NotFound.member");
         }
     }
+
+
 }
