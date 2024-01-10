@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="form">
-    <input type="hidden" name="gid" value="testgid">
+<th:block th:fragment="form" th:object="${requestBoardConfig}">
+    <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+
+    <input type="hidden" name="gid" th:field="*{gid}">
+
     <h2>기본 설정</h2>
     <table class="table_cols mb30">
         <tr>
-            <th>사용여부</th>
+            <th width="180">사용여부</th>
             <td>
-                <input type="radio" name="active" value="true" id="active_true">
+                <input type="radio" name="active" value="true" id="active_true" th:field="*{active}">
                 <label for="active_true">사용</label>
 
-                <input type="radio" name="active" value="false" id="active_false">
+                <input type="radio" name="active" value="false" id="active_false" th:field="*{active}">
                 <label for="active_false">미사용</label>
             </td>
         </tr>
-
         <tr>
             <th>게시판 ID</th>
-            <td>
-                <input type="text" name="bid">
+            <td th:if="*{mode != 'edit'}">
+                <input type="text" name="bid" th:field="*{bid}">
+            </td>
+            <td th:if="*{mode == 'edit'}"> <!-- 수정 -->
+                <input type="hidden" name="bid" th:field="*{bid}">
+                <th:block th:text="*{bid}"></th:block>
             </td>
         </tr>
         <tr>
@@ -65,6 +71,7 @@
                 <label for="useComment_false">미사용</label>
             </td>
         </tr>
+
         <tr>
             <th>에디터</th>
             <td>
@@ -75,6 +82,7 @@
                 <label for="useEditor_false">미사용</label>
             </td>
         </tr>
+
         <tr>
             <th>이미지 첨부</th>
             <td>
@@ -85,6 +93,7 @@
                 <label for="useUploadImage_false">미사용</label>
             </td>
         </tr>
+
         <tr>
             <th>파일 첨부</th>
             <td>
@@ -95,6 +104,7 @@
                 <label for="useUploadFile_false">사용</label>
             </td>
         </tr>
+
         <tr>
             <th>글작성 후 이동</th>
             <td>
@@ -105,6 +115,7 @@
                 <label for="locationAfterWriting_view">글보기</label>
             </td>
         </tr>
+
         <tr>
             <th>스킨</th>
             <td>
@@ -129,7 +140,7 @@
     <h2>게시판 분류</h2>
     <table class="table_cols mb30">
         <tr>
-            <th  width="180">분류</th>
+            <th width="180">분류</th>
             <td>
                 <textarea name="category" placeholder="여러 분류는 줄개행하여 입력"></textarea>
             </td>
@@ -139,7 +150,7 @@
     <h2>권한 설정</h2>
     <table class="table_cols mb30">
         <tr>
-            <th  width="180">글목록</th>
+            <th width="180">글목록</th>
             <td>
                 <input type="radio" name="listAccessType" value="ALL" id="listAccessType_ALL">
                 <label for="listAccessType_ALL">비회원+회원+관리자</label>
@@ -152,7 +163,7 @@
             </td>
         </tr>
         <tr>
-            <th width="180">글보기</th>
+            <th>글보기</th>
             <td>
                 <input type="radio" name="viewAccessType" value="ALL" id="viewAccessType_ALL">
                 <label for="viewAccessType_ALL">비회원+회원+관리자</label>
@@ -165,7 +176,7 @@
             </td>
         </tr>
         <tr>
-            <th  width="180">글쓰기</th>
+            <th>글쓰기</th>
             <td>
                 <input type="radio" name="writeAccessType" value="ALL" id="writeAccessType_ALL">
                 <label for="writeAccessType_ALL">비회원+회원+관리자</label>
@@ -178,7 +189,7 @@
             </td>
         </tr>
         <tr>
-            <th  width="180">답글</th>
+            <th>답글</th>
             <td>
                 <input type="radio" name="replyAccessType" value="ALL" id="replyAccessType_ALL">
                 <label for="replyAccessType_ALL">비회원+회원+관리자</label>
@@ -191,7 +202,7 @@
             </td>
         </tr>
         <tr>
-            <th  width="180">댓글</th>
+            <th>댓글</th>
             <td>
                 <input type="radio" name="commentAccessType" value="ALL" id="commentAccessType_ALL">
                 <label for="commentAccessType_ALL">비회원+회원+관리자</label>
@@ -213,7 +224,8 @@
                 <textarea id="html_top" name="htmlTop"></textarea>
 
                 <button type="button" class="upload_files"
-                    data-location="html_top" data-image-only="true" >이미지 추가</button>
+                        data-location="html_top" data-image-only="true"
+                >이미지 추가</button>
                 <div class="uploaded_files" id="uploaded_files_html_top"></div>
             </td>
         </tr>
@@ -227,7 +239,8 @@
                 <textarea id="html_bottom" name="htmlBottom"></textarea>
 
                 <button type="button" class="upload_files"
-                        data-location="html_bottom" data-image-only="true">이미지 추가</button>
+                        data-location="html_bottom" data-image-only="true"
+                >이미지 추가</button>
                 <div class="uploaded_files" id="uploaded_files_html_bottom"></div>
             </td>
         </tr>
