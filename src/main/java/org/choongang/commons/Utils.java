@@ -161,7 +161,6 @@ public class Utils {
      * @return
      */
     public static int onlyPositiveNumber(int num, int replace) {
-
         return num < 1 ?  replace : num;
     }
 }
