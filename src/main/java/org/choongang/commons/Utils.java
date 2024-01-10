@@ -160,7 +160,8 @@ public class Utils {
      * @param replace
      * @return
      */
-    public static int onlyPostitiveNumber(int num, int replace) {
-        return num < 1 ? num : 1;
+    public static int onlyPositiveNumber(int num, int replace) {
+
+        return num < 1 ?  replace : num;
     }
 }
