@@ -153,4 +153,14 @@ public class Utils {
 
         return chars.stream().limit(length).collect(Collectors.joining());
     }
+
+    /**
+     * 0이상 정수인 경우 1이상 정수로 대체
+     * @param num
+     * @param replace
+     * @return
+     */
+    public static int onlyPostitiveNumber(int num, int replace) {
+        return num < 1 ? num : 1;
+    }
 }
