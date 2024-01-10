@@ -20,7 +20,7 @@ public class EmailSendTest {
 
     @Test
     void sendTest() {
-        EmailMessage message = new EmailMessage("yonggyo00@kakao.com", "제목...", "내용...");
+        EmailMessage message = new EmailMessage("dkumylove@naver.com", "제목...", "내용...");
         boolean success = emailSendService.sendMail(message);
 
         assertTrue(success);
@@ -29,7 +29,7 @@ public class EmailSendTest {
     @Test
     @DisplayName("템플릿 형태로 전송 테스트")
     void sendWithTplTest() {
-        EmailMessage message = new EmailMessage("yonggyo00@kakao.com", "제목...", "내용...");
+        EmailMessage message = new EmailMessage("dkumylove@naver.com", "제목...", "내용...");
         Map<String,Object> tplData = new HashMap<>();
         tplData.put("authNum", "123456");
         boolean success = emailSendService.sendMail(message, "auth", tplData);
