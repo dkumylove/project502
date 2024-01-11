@@ -21,8 +21,6 @@
             <th>게시판 ID</th>
             <td th:if="*{mode != 'edit'}">
                 <input type="text" name="bid" th:field="*{bid}">
-
-                <div class="error" th:each="err : ${#fields.errors('bid')}" th:text="${err}"></div>
             </td>
             <td th:if="*{mode == 'edit'}"> <!-- 수정 -->
                 <input type="hidden" name="bid" th:field="*{bid}">
@@ -32,46 +30,44 @@
         <tr>
             <th>게시판 이름</th>
             <td>
-                <input type="text" name="bName" th:field="*{bName}">
-
-                <div class="error" th:each="err : ${#fields.errors('bName')}" th:text="${err}"></div>
+                <input type="text" name="bName">
             </td>
         </tr>
         <tr>
             <th>1페이지 게시글 수</th>
             <td>
-                <input type="number" name="rowsPerPage" min="1" th:field="*{rowsPerPage}">
+                <input type="number" name="rowsPerPage" min="1">
             </td>
         </tr>
         <tr>
             <th>페이지 구간 갯수(PC)</th>
             <td>
-                <input type="number" name="pageCountPc" min="1" th:field="*{pageCountPc}">
+                <input type="number" name="pageCountPc" min="1">
             </td>
         </tr>
         <tr>
             <th>페이지 구간 갯수(Mo)</th>
             <td>
-                <input type="number" name="pageCountMobile" min="1" th:field="*{pageCountMobile}">
+                <input type="number" name="pageCountMobile" min="1">
             </td>
         </tr>
         <tr>
             <th>답글 사용</th>
             <td>
-                <input type="radio" name="useReply" value="true" id="useReply_true" th:field="*{useReply}">
+                <input type="radio" name="useReply" value="true" id="useReply_true">
                 <label for="useReply_true">사용</label>
 
-                <input type="radio" name="useReply" value="false" id="useReply_false" th:field="*{useReply}">
+                <input type="radio" name="useReply" value="false" id="useReply_false">
                 <label for="useReply_false">미사용</label>
             </td>
         </tr>
         <tr>
             <th>댓글 사용</th>
             <td>
-                <input type="radio" name="useComment" value="true" id="useComment_true" th:field="*{useComment}">
+                <input type="radio" name="useComment" value="true" id="useComment_true">
                 <label for="useComment_true">사용</label>
 
-                <input type="radio" name="useComment" value="false" id="useComment_false" th:field="*{useComment}">
+                <input type="radio" name="useComment" value="false" id="useComment_false">
                 <label for="useComment_false">미사용</label>
             </td>
         </tr>
@@ -79,10 +75,10 @@
         <tr>
             <th>에디터</th>
             <td>
-                <input type="radio" name="useEditor" value="true" id="useEditor_true" th:field="*{useEditor}">
+                <input type="radio" name="useEditor" value="true" id="useEditor_true">
                 <label for="useEditor_true">사용</label>
 
-                <input type="radio" name="useEditor" value="false" id="useEditor_false" th:field="*{useEditor}">
+                <input type="radio" name="useEditor" value="false" id="useEditor_false">
                 <label for="useEditor_false">미사용</label>
             </td>
         </tr>
@@ -90,10 +86,10 @@
         <tr>
             <th>이미지 첨부</th>
             <td>
-                <input type="radio" name="useUploadImage" value="true" id="useUploadImage_true" th:field="*{useUploadImage}">
+                <input type="radio" name="useUploadImage" value="true" id="useUploadImage_true">
                 <label for="useUploadImage_true">사용</label>
 
-                <input type="radio" name="useUploadImage" value="false" id="useUploadImage_false" th:field="*{useUploadImage}">
+                <input type="radio" name="useUploadImage" value="false" id="useUploadImage_false">
                 <label for="useUploadImage_false">미사용</label>
             </td>
         </tr>
@@ -101,21 +97,21 @@
         <tr>
             <th>파일 첨부</th>
             <td>
-                <input type="radio" name="useUploadFile" value="true" id="useUploadFile_true" th:field="*{useUploadFile}">
+                <input type="radio" name="useUploadFile" value="true" id="useUploadFile_true">
                 <label for="useUploadFile_true">사용</label>
 
-                <input type="radio" name="useUploadFile" value="false" id="useUploadFile_false" th:field="*{useUploadFile}">
-                <label for="useUploadFile_false">미사용</label>
+                <input type="radio" name="useUploadFile" value="false" id="useUploadFile_false">
+                <label for="useUploadFile_false">사용</label>
             </td>
         </tr>
 
         <tr>
             <th>글작성 후 이동</th>
             <td>
-                <input type="radio" name="locationAfterWriting" value="list" id="locationAfterWriting_list" th:field="*{locationAfterWriting}">
+                <input type="radio" name="locationAfterWriting" value="list" id="locationAfterWriting_list">
                 <label for="locationAfterWriting_list">글목록</label>
 
-                <input type="radio" name="locationAfterWriting" value="view" id="locationAfterWriting_view" th:field="*{locationAfterWriting}">
+                <input type="radio" name="locationAfterWriting" value="view" id="locationAfterWriting_view">
                 <label for="locationAfterWriting_view">글보기</label>
             </td>
         </tr>
@@ -123,19 +119,19 @@
         <tr>
             <th>스킨</th>
             <td>
-                <input type="radio" name="skin" value="default" id="skin_default" th:field="*{skin}">
+                <input type="radio" name="skin" value="default" id="skin_default">
                 <label for="skin_default">기본(default)</label>
 
-                <input type="radio" name="skin" value="gallery" id="skin_gallery" th:field="*{skin}">
+                <input type="radio" name="skin" value="gallery" id="skin_gallery">
                 <label for="skin_gallery">갤러리(gallery)</label>
 
-                <input type="radio" name="skin" value="qna" id="skin_qna" th:field="*{skin}">
+                <input type="radio" name="skin" value="qna" id="skin_qna">
                 <label for="skin_qna">질문과 답변(QnA)</label>
 
-                <input type="radio" name="skin" value="review" id="skin_review" th:field="*{skin}">
+                <input type="radio" name="skin" value="review" id="skin_review">
                 <label for="skin_review">후기(review)</label>
 
-                <input type="radio" name="skin" value="blog" id="skin_blog" th:field="*{skin}">
+                <input type="radio" name="skin" value="blog" id="skin_blog">
                 <label for="skin_blog">블로그(blog)</label>
             </td>
         </tr>
@@ -146,7 +142,7 @@
         <tr>
             <th width="180">분류</th>
             <td>
-                <textarea name="category" placeholder="여러 분류는 줄개행하여 입력" th:field="*{category}"></textarea>
+                <textarea name="category" placeholder="여러 분류는 줄개행하여 입력"></textarea>
             </td>
         </tr>
     </table>
@@ -156,65 +152,65 @@
         <tr>
             <th width="180">글목록</th>
             <td>
-                <input type="radio" name="listAccessType" value="ALL" id="listAccessType_ALL" th:field="*{listAccessType}">
+                <input type="radio" name="listAccessType" value="ALL" id="listAccessType_ALL">
                 <label for="listAccessType_ALL">비회원+회원+관리자</label>
 
-                <input type="radio" name="listAccessType" value="MEMBER" id="listAccessType_MEMBER" th:field="*{listAccessType}">
+                <input type="radio" name="listAccessType" value="MEMBER" id="listAccessType_MEMBER">
                 <label for="listAccessType_MEMBER">회원+관리자</label>
 
-                <input type="radio" name="listAccessType" value="ADMIN" id="listAccessType_ADMIN" th:field="*{listAccessType}">
+                <input type="radio" name="listAccessType" value="ADMIN" id="listAccessType_ADMIN">
                 <label for="listAccessType_ADMIN">관리자</label>
             </td>
         </tr>
         <tr>
             <th>글보기</th>
             <td>
-                <input type="radio" name="viewAccessType" value="ALL" id="viewAccessType_ALL" th:field="*{viewAccessType}">
+                <input type="radio" name="viewAccessType" value="ALL" id="viewAccessType_ALL">
                 <label for="viewAccessType_ALL">비회원+회원+관리자</label>
 
-                <input type="radio" name="viewAccessType" value="MEMBER" id="viewAccessType_MEMBER" th:field="*{viewAccessType}">
+                <input type="radio" name="viewAccessType" value="MEMBER" id="viewAccessType_MEMBER">
                 <label for="viewAccessType_MEMBER">회원+관리자</label>
 
-                <input type="radio" name="viewAccessType" value="ADMIN" id="viewAccessType_ADMIN" th:field="*{viewAccessType}">
+                <input type="radio" name="viewAccessType" value="ADMIN" id="viewAccessType_ADMIN">
                 <label for="viewAccessType_ADMIN">관리자</label>
             </td>
         </tr>
         <tr>
             <th>글쓰기</th>
             <td>
-                <input type="radio" name="writeAccessType" value="ALL" id="writeAccessType_ALL" th:field="*{writeAccessType}">
+                <input type="radio" name="writeAccessType" value="ALL" id="writeAccessType_ALL">
                 <label for="writeAccessType_ALL">비회원+회원+관리자</label>
 
-                <input type="radio" name="writeAccessType" value="MEMBER" id="writeAccessType_MEMBER" th:field="*{writeAccessType}">
+                <input type="radio" name="writeAccessType" value="MEMBER" id="writeAccessType_MEMBER">
                 <label for="writeAccessType_MEMBER">회원+관리자</label>
 
-                <input type="radio" name="writeAccessType" value="ADMIN" id="writeAccessType_ADMIN" th:field="*{writeAccessType}">
+                <input type="radio" name="writeAccessType" value="ADMIN" id="writeAccessType_ADMIN">
                 <label for="writeAccessType_ADMIN">관리자</label>
             </td>
         </tr>
         <tr>
             <th>답글</th>
             <td>
-                <input type="radio" name="replyAccessType" value="ALL" id="replyAccessType_ALL" th:field="*{replyAccessType}">
+                <input type="radio" name="replyAccessType" value="ALL" id="replyAccessType_ALL">
                 <label for="replyAccessType_ALL">비회원+회원+관리자</label>
 
-                <input type="radio" name="replyAccessType" value="MEMBER" id="replyAccessType_MEMBER" th:field="*{replyAccessType}">
+                <input type="radio" name="replyAccessType" value="MEMBER" id="replyAccessType_MEMBER">
                 <label for="replyAccessType_MEMBER">회원+관리자</label>
 
-                <input type="radio" name="replyAccessType" value="ADMIN" id="replyAccessType_ADMIN" th:field="*{replyAccessType}">
+                <input type="radio" name="replyAccessType" value="ADMIN" id="replyAccessType_ADMIN">
                 <label for="replyAccessType_ADMIN">관리자</label>
             </td>
         </tr>
         <tr>
             <th>댓글</th>
             <td>
-                <input type="radio" name="commentAccessType" value="ALL" id="commentAccessType_ALL" th:field="*{commentAccessType}">
+                <input type="radio" name="commentAccessType" value="ALL" id="commentAccessType_ALL">
                 <label for="commentAccessType_ALL">비회원+회원+관리자</label>
 
-                <input type="radio" name="commentAccessType" value="MEMBER" id="commentAccessType_MEMBER" th:field="*{commentAccessType}">
+                <input type="radio" name="commentAccessType" value="MEMBER" id="commentAccessType_MEMBER">
                 <label for="commentAccessType_MEMBER">회원+관리자</label>
 
-                <input type="radio" name="commentAccessType" value="ADMIN" id="commentAccessType_ADMIN" th:field="*{commentAccessType}">
+                <input type="radio" name="commentAccessType" value="ADMIN" id="commentAccessType_ADMIN">
                 <label for="commentAccessType_ADMIN">관리자</label>
             </td>
         </tr>
@@ -225,13 +221,11 @@
         <tr>
             <th width="180">내용</th>
             <td>
-                <textarea id="html_top" name="htmlTop" th:field="*{htmlTop}"></textarea>
+                <textarea id="html_top" name="htmlTop"></textarea>
 
-                <button type="button" class="upload_files sbtn"
-                        data-location="html_top" data-image-only="true">
-                <i class="xi-image-o"></i>
-                    이미지 추가
-                </button>
+                <button type="button" class="upload_files"
+                        data-location="html_top" data-image-only="true"
+                >이미지 추가</button>
                 <div class="uploaded_files" id="uploaded_files_html_top"></div>
             </td>
         </tr>
@@ -242,13 +236,11 @@
         <tr>
             <th width="180">내용</th>
             <td>
-                <textarea id="html_bottom" name="htmlBottom" th:field="*{htmlBottom}"></textarea>
+                <textarea id="html_bottom" name="htmlBottom"></textarea>
 
-                <button type="button" class="upload_files sbtn"
-                        data-location="html_bottom" data-image-only="true">
-                    <i class="xi-image-o"></i>
-                    이미지 추가
-                </button>
+                <button type="button" class="upload_files"
+                        data-location="html_bottom" data-image-only="true"
+                >이미지 추가</button>
                 <div class="uploaded_files" id="uploaded_files_html_bottom"></div>
             </td>
         </tr>
