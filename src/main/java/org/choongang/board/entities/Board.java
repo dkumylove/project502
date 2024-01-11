@@ -102,4 +102,4 @@ public class Board extends BaseMember {
     @Transient
     private List<FileInfo> htmlBottomImages; // 게시판 하단 Bottom 이미지
 }
->>>>>>> master
+
