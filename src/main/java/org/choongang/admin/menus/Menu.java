@@ -10,9 +10,21 @@ public class Menu {
 
     static {
         menus = new HashMap<>();
+        menus.put("config", Arrays.asList(
+                new MenuDetail("basic", "기본설정", "/admin/config"),
+                new MenuDetail("api", "API 설정", "/admin/config/api")
+        ));
+
         menus.put("member", Arrays.asList(
                 new MenuDetail("list", "회원목록", "/admin/member"),
                 new MenuDetail("authority", "회원권한", "/admin/member/authority")
+        ));
+
+        // 상품관리
+        menus.put("product", Arrays.asList(
+                new MenuDetail("list", "상품목록", "/admin/product"),
+                new MenuDetail("add", "상품등록", "/admin/product/add"),
+                new MenuDetail("category", "상품분류", "/admin/product/category")
         ));
 
         menus.put("board", Arrays.asList(
