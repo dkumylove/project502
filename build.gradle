@@ -45,6 +45,13 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	/* feign client */
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+
+	/* jwt */
+	//implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	//implementation 'com.auth0:java-jwt:3.16.0'
+
 	/* Querydsl */
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
@@ -60,6 +67,15 @@ dependencies {
 
 	/* email */
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	/* CSV 파일 읽어오기 */
+	implementation 'com.opencsv:opencsv:5.9'
+
+	/* 엑셀 파일 읽어오기 */
+	implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
+	/* snake_case vs. CamelCase */
+	implementation 'com.google.code.gson:gson:2.9.0'
 
 	/* test */
 	testRuntimeOnly 'com.h2database:h2'

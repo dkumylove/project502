@@ -17,6 +17,9 @@ commonLib.fileManager = {
                 throw new Error("업로드할 파일을 선택하세요.");
             }
 
+            if (singleFile) { //단일파일 업로드 -> 첫번쨰 업로드 파일로 한정
+               files = [files[0]];
+            }
 
             // gid
             const gidEl = document.querySelector("[name='gid']");
@@ -112,4 +115,18 @@ window.addEventListener("DOMContentLoaded", function() {
             fileEl.click();
         });
     }
+
+    /* 드래그 앤 드롭 파일 업로드 처리 s  drag, dragover, drop */
+    //preventDefault() : 기본동작 차단
+    const dragndropUploads = document.getElementsByClassName("dragndrop_uploads");
+    for(const el of dragndropUploads) {
+        el.addEventListener("dragover", function (e) {
+            e.preventDefault(); // 기본동작차단 (드랍시 사진 보여주는 동작)
+        });
+        el.addEventListener("drop", function (e){
+            e.preventDefault(); // 기본동작 차단 (드랍시 사진 보여주는 동작)
+            console.log(e.dataTransfer.files);
+        })
+    }
+    /* 드래그 앤 드롭 파일 업로드 처리 e */
 });
