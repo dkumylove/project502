@@ -8,10 +8,14 @@ import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -24,7 +28,7 @@ public class BoardController implements ExceptionProcessor {
      */
 
     private final Utils utils;
-    private BoardConfigInfoService configInfoService;
+    private final BoardConfigInfoService configInfoService;
     private Board board;  //게시판 설정
 
     /**
@@ -104,14 +108,53 @@ public class BoardController implements ExceptionProcessor {
      * @param model
      */
    private void commonProcess(String bid, String mode, Model model) {
+
+       mode = StringUtils.hasText(mode) ? mode : "list"; // 없으면 기본값 list
+
+       List<String> addCommonScript = new ArrayList<>();  // 공통 스크립트
+       List<String> addScript = new ArrayList<>();  // 프론튼, 모바일쪽 스크립트
+
+       List<String> addCommonCss = new ArrayList<>();  // 공통 css
+       List<String> addCss = new ArrayList<>();  // 프론튼, 모바일쪽 css
+
        /* 게시판 설정 처리 s */
-       if(board == null) {
-           board = configInfoService.get(bid);
-       }
+//       if(board == null) {
+//           board = configInfoService.get(bid);
+//       }  // board 한번 바꾸면 안바뀌게 설정함. 문제: DB에 변경되어도 새롭게 만들지 않음
+       board = configInfoService.get(bid);
+
+       //스킨별 css, js추가
+       String skin = board.getSkin();
+       addScript.add("board/skin_"+ skin);
+       addCss.add("board/skin_"+ skin);
 
        model.addAttribute("board", board);
-
        /* 게시판 설정 처리 e */
+
+       String pageTitle = board.getBName(); // 게시판명이 기본 타이틀
+
+       if (mode.equals("write") || mode.equals("update")) { // 쓰기 또는 수정
+           if (board.isUseEditor()) { //에디터 사용하는 경우
+               addCommonScript.add("ckeditor5/ckeditor");
+           }
+           // 이미지 또는 파일첨부를 사용하는 경우
+           if (board.isUseUploadImage() || board.isUseUploadFile()) {
+               addCommonScript.add("fileManager");
+           }
+
+           addScript.add("board/form");
+
+           // 제목 타이틀
+           pageTitle += " ";
+           pageTitle += mode.equals("update") ? Utils.getMessage("글수정", "commons") : Utils.getMessage("글쓰기", "commons");
+       }
+
+       model.addAttribute("addCommonScript", addCommonScript);
+       model.addAttribute("addScript", addScript);
+       model.addAttribute("addCommonCss", addCommonCss);
+       model.addAttribute("addCss", addCss);
+       model.addAttribute("pageTitle", pageTitle);
+
    }
 
     /**
