@@ -1,5 +1,6 @@
 package org.choongang.board.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
 import org.choongang.board.repositories.BoardDataRepository;
@@ -9,10 +10,8 @@ import org.choongang.commons.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/write/{bid}")
-    public String write(@PathVariable("bid")String bid, Model model) {
+    public String write(@PathVariable("bid")String bid,@ModelAttribute RequestBoard form, Model model) {
 
         commonProcess(bid, "write", model);
 
@@ -94,7 +93,20 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @PostMapping("/save")
-   public String save(Model model) {
+   public String save(@Valid RequestBoard form, Errors errors, Model model) {
+
+        String bid = form.getBid();
+        String mode = form.getMode();
+
+        commonProcess(form.getBid(), form.getMode(), model);
+
+        if (errors.hasErrors()) {
+            return utils.tpl("board/" + mode);
+        }
+
+        Long seq = 0L; // 임시
+        String redirectURL = "/board/";
+        redirectURL += board.getLocationAfterWriting() == "view" ? "view/" + seq : "list/" + form.getBid();
 
        return null;
    }
