@@ -7,6 +7,8 @@ import org.choongang.board.repositories.BoardDataRepository;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
+import org.choongang.member.MemberUtil;
+import org.choongang.member.entities.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -28,6 +30,7 @@ public class BoardController implements ExceptionProcessor {
 
     private final Utils utils;
     private final BoardConfigInfoService configInfoService;
+    private final MemberUtil memberUtil;
     private Board board;  //게시판 설정
 
     /**
@@ -66,9 +69,14 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/write/{bid}")
-    public String write(@PathVariable("bid")String bid,@ModelAttribute RequestBoard form, Model model) {
+    public String write(@PathVariable("bid")String bid,@ModelAttribute RequestBoard form, Model model ) {
 
         commonProcess(bid, "write", model);
+
+        if(memberUtil.isLogin()) {
+            Member member = memberUtil.getMember();
+            form.setPoster(member.getName());
+        }
 
         return utils.tpl("board/write");
     }
