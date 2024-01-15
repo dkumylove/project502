@@ -18,9 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardConfigSaveService {
 
-    private final Utils utils;
     private final BoardRepository boardRepository;
     private final FileUploadService fileUploadService;
+    private final Utils utils;
 
     /**
      * 블린
@@ -69,23 +69,20 @@ public class BoardConfigSaveService {
         fileUploadService.processDone(board.getGid());
     }
 
-    /**
-     * 수정후 저장
-     * @param chks
-     */
     public void saveList(List<Integer> chks) {
         if (chks == null || chks.isEmpty()) {
-            throw new AlertException("수정할 게시판을 선택하세요", HttpStatus.BAD_REQUEST);
+            throw new AlertException("수정할 게시판을 선택하세요.", HttpStatus.BAD_REQUEST);
         }
 
-        for(int chk : chks) {
+        for (int chk : chks) {
             String bid = utils.getParam("bid_" + chk);
             Board board = boardRepository.findById(bid).orElse(null);
-            if(board == null) continue;
+            if (board == null) continue;
 
             boolean active = Boolean.parseBoolean(utils.getParam("active_" + chk));
             board.setActive(active);
         }
+
         boardRepository.flush();
     }
 }

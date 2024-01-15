@@ -53,6 +53,7 @@ public class BoardConfigInfoService {
      * @param bid
      * @return
      */
+
     public RequestBoardConfig getForm(String bid) {
         Board board = get(bid);
 

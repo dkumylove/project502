@@ -89,15 +89,17 @@ public class Board extends BaseMember {
     private List<FileInfo> htmlBottomImages; // 게시판 하단 Bottom 이미지
 
     /**
-     * 분류 List형태로 변환
+     * 분류 List 형태로 변환
+     *
      * @return
      */
     public List<String> getCategories() {
-        List<String> categories = new ArrayList();
+        List<String> categories = new ArrayList<>();
 
-        if(StringUtils.hasText(category)) {
-            categories = Arrays.stream(category.split("\\n"))
-                    .map(s -> s.trim().replaceAll( "\\r", "")).toList();
+        if (StringUtils.hasText(category)) {
+            categories = Arrays.stream(category.trim().split("\\n"))
+                    .map(s -> s.trim().replaceAll("\\r", ""))
+                    .toList();
         }
 
         return categories;

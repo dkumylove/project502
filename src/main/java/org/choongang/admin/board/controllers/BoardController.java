@@ -64,6 +64,7 @@ public class BoardController implements ExceptionProcessor {
     /**
      * 게시판 목록 - 수정
      *
+     * @param chks
      * @return
      */
     @PatchMapping
@@ -73,7 +74,6 @@ public class BoardController implements ExceptionProcessor {
         configSaveService.saveList(chks);
 
         model.addAttribute("script", "parent.location.reload()");
-
         return "common/_execute_script";
     }
 
@@ -83,8 +83,7 @@ public class BoardController implements ExceptionProcessor {
 
         configDeleteService.deleteList(chks);
 
-        model.addAttribute("script", "parent.location.reload()");
-
+        model.addAttribute("script", "parent.location.reload();");
         return "common/_execute_script";
     }
 
@@ -146,7 +145,6 @@ public class BoardController implements ExceptionProcessor {
 
         return "admin/board/posts";
     }
-
     /**
      * 공통 처리
      *

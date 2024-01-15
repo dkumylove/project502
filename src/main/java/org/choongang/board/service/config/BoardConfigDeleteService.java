@@ -35,7 +35,7 @@ public class BoardConfigDeleteService {
 
         boardRepository.delete(board);  // 게시판삭제
 
-        boardRepository.flush();;
+        boardRepository.flush();
 
         fileDeleteService.delete(gid);  // 게시판에 파일삭제
 
@@ -43,11 +43,11 @@ public class BoardConfigDeleteService {
 
 
     public void deleteList(List<Integer> chks) {
-        if(chks == null || chks.isEmpty()) {
-            throw new AlertException("삭제할 게시판을 선택하세요", HttpStatus.BAD_REQUEST);
+        if (chks == null || chks.isEmpty()) {
+            throw new AlertException("삭제할 게시판을 선택하세요.", HttpStatus.BAD_REQUEST);
         }
 
-        for(int chk : chks) {
+        for (int chk : chks) {
             String bid = utils.getParam("bid_" + chk);
             delete(bid);
         }
