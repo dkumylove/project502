@@ -1,40 +1,127 @@
 package org.choongang.board.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.choongang.board.entities.BoardData;
+import org.choongang.board.entities.Board;
 import org.choongang.board.repositories.BoardDataRepository;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.choongang.board.service.config.BoardConfigInfoService;
+import org.choongang.commons.ExceptionProcessor;
+import org.choongang.commons.Utils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor
-public class BoardController {
+public class BoardController implements ExceptionProcessor {
     private final BoardDataRepository boardDataRepository;
 
-    @ResponseBody
-    @GetMapping("/test")
-    public void test() {
-        BoardData data = boardDataRepository.findById(1L).orElse(null);
-        data.setSubject("(수정)제목");
-        boardDataRepository.flush();
+    /**
+     * 쓰기 수정 삭제, 목록 등
+     */
 
-        /*
-        BoardData data = new BoardData();
-        data.setSubject("제목");
-        data.setContent("내용");
-        boardDataRepository.saveAndFlush(data);
-         */
+    private final Utils utils;
+    private BoardConfigInfoService configInfoService;
+    private Board board;  //게시판 설정
+
+    /**
+     * 게시판 목록
+     * @param bid : 게시판 아이디
+     * @param model
+     * @return
+     */
+    @GetMapping("/list/{bid}")
+    public String list(@PathVariable("bid") String bid, Model model) {
+
+        commonProcess(bid, "list", model);
+
+        return utils.tpl("board/list");
     }
 
-    @ResponseBody
-    @GetMapping("/test2")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    //@Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
-    public void test2() {
-        System.out.println("test2 ================");
+
+    /**
+     * 게시물 보기
+     * @param seq
+     * @param model
+     * @return
+     */
+    @GetMapping("/view/{seq}")
+    public String view(@PathVariable("seq")Long seq, Model model) {
+
+        commonProcess(seq, "view", model);
+
+        return utils.tpl("board/view");
     }
+
+    /**
+     * 게시글 작성하기
+     * @param bid
+     * @param model
+     * @return
+     */
+    @GetMapping("/write/{bid}")
+    public String write(@PathVariable("bid")String bid, Model model) {
+
+        commonProcess(bid, "write", model);
+
+        return utils.tpl("board/write");
+    }
+
+    /**
+     * 게시글 수정하기
+     * @param seq
+     * @param model
+     * @return
+     */
+   @GetMapping("/update/{seq}")
+    private String update(@PathVariable("seq")Long seq, Model model) {
+
+       commonProcess(seq, "update", model);
+
+       return utils.tpl("board/update");
+   }
+
+    /**
+     * 게시글 등록, 수정
+     * @param model
+     * @return
+     */
+    @PostMapping("/save")
+   public String save(Model model) {
+
+       return null;
+   }
+
+
+    /**
+     * 게시판 공통 처리 - 글목록, 글쓰기 등 게시판 ID가 있는 경우
+     *
+     * @param bid : 게시판 id
+     * @param mode
+     * @param model
+     */
+   private void commonProcess(String bid, String mode, Model model) {
+       /* 게시판 설정 처리 s */
+       if(board == null) {
+           board = configInfoService.get(bid);
+       }
+
+       model.addAttribute("board", board);
+
+       /* 게시판 설정 처리 e */
+   }
+
+    /**
+     * 게시판 공통 처리 : 게시글 보기, 게시글 수정 - 게시글 번호가 있는 경우
+     *      - 게시글 조회 -> 게시판 설정
+     * @param seq
+     * @param mode
+     * @param model
+     */
+   private void commonProcess(Long seq, String mode, Model model) {
+
+   }
 }
