@@ -64,7 +64,7 @@
                 <div class="error" th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
             </dd>
         </dl>
-        <dl>
+        <!--<dl>
             <dt th:text="#{주소}"></dt>
             <dd>
                 <div>
@@ -78,7 +78,7 @@
                     <input type="text" name="addressSub" th:field="*{addressSub}" th:placeholder="#{나머지_주소}">
                 </div>
             </dd>
-        </dl>
+        </dl>-->
 
         <dl>
             <dt th:text="#{프로필_이미지}"></dt>

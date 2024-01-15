@@ -5,7 +5,9 @@
 <main layout:fragment="content">
    <!-- 스킨에 따라 안내하는 대문 페이지-->
 
-    <th:block th:if="${board.skin == null || board.skin == 'default'}" th:replace="~{front/board/skins/default/list::default}"></th:block>
+    <th:block th:if="${board.skin == null || board.skin == 'default'}">
+        <th:block th:replace="~{front/board/skins/default/list::default}"></th:block>
+    </th:block>
 
     <th:block th:if="${board.skin == 'gallery'}">
         <th:block th:replace="~{front/board/skins/gallery/list::gallery}"></th:block>
@@ -22,5 +24,6 @@
     <th:block th:if="${board.skin == 'blog'}">
         <th:block th:replace="~{front/board/skins/blog/list::blog}"></th:block>
     </th:block>
+
 </main>
 </html>
