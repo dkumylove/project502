@@ -11,18 +11,14 @@ import lombok.NoArgsConstructor;
 import org.choongang.commons.entities.BaseMember;
 import org.springframework.data.annotation.Id;
 
-@Data
+
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Table(indexes = @Index(name="idx_category_listOrder", columnList = "listOrder DESC, createdAt DESC"))
 public class Category extends BaseMember {
-
-    /**
-     * 쇼핑몰 - 상품분류
-     */
-
     @Id
     @Column(length=30)
     private String cateCd; // 분류코드
@@ -33,4 +29,14 @@ public class Category extends BaseMember {
     private int listOrder; // 진열 가중치
 
     private boolean active; // 사용 여부
+    @jakarta.persistence.Id
+    private Long id;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }
