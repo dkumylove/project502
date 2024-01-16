@@ -1,0 +1,11 @@
+.board_view .subject { border: 1px solid #222; padding: 10px, 15px; border-radius: 3px; font-size: 1.35rem; font-weight: 500; margin-bottom: 10px;}
+.board_view .content { border: 1px solid #222; padding: 15px; border-radius: 3px; margin-bottom: 10px;}
+
+
+.board_view .post_info { display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; padding: 7px 15px; margin-bottom: 10px}
+.board_view .post_info .left span { margin-rigth: 20px;}
+.board_view .post_info .rigth span { margin-left: 20px;}
+
+.board_view .downloads li { border-bottom: 1px solid #222; background: thistle; padding: 7px 15px;}
+.board_view .downloads li a:hover {text-decoration:  underline;}
+.board_view .downloads li:first-of-type {border-top: 1px solid #222;}

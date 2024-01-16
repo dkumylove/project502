@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
 import org.choongang.board.entities.BoardData;
+import org.choongang.board.service.BoardInfoService;
 import org.choongang.board.service.BoardSaveService;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ExceptionProcessor;
@@ -33,11 +34,14 @@ public class BoardController implements ExceptionProcessor {
     private final Utils utils;
     private final BoardConfigInfoService configInfoService;
     private final FileInfoService fileInfoService;
+    private final BoardInfoService boardInfoService;
     private final BoardFormValidator boardFormValidator;
     private final MemberUtil memberUtil;
     private final BoardSaveService boardSaveService;
 
+
     private Board board; // 게시판 설정
+    private BoardData boardData;  //게시글
 
     /**
      * 게시판 목록
@@ -100,7 +104,6 @@ public class BoardController implements ExceptionProcessor {
 
         return utils.tpl("board/update");
     }
-
 
     /**
      * 게시글 등록, 수정
@@ -186,6 +189,9 @@ public class BoardController implements ExceptionProcessor {
 
            pageTitle += " ";
            pageTitle += mode.equals("update") ?  Utils.getMessage("글수정", "commons") :  Utils.getMessage("글쓰기", "commons");
+       } else if (mode.equals("view")) {
+           // 페이지 타이틀 - 글제목 | 게시판 명
+           pageTitle = String.format("%s | %s", boardData.getSubject(), board.getBName());
        }
 
        model.addAttribute("addCommonScript", addCommonScript);
@@ -205,6 +211,11 @@ public class BoardController implements ExceptionProcessor {
      * @param model
      */
     private void commonProcess(Long seq, String mode, Model model) {
+        boardData = boardInfoService.get(seq);
 
+        String bid = boardData.getBoard().getBid();
+        commonProcess(bid, mode, model);
+
+        model.addAttribute("boardData", boardData);
     }
 }
