@@ -3,6 +3,8 @@ package org.choongang.board.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
+import org.choongang.board.entities.BoardData;
+import org.choongang.board.service.BoardSaveService;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
@@ -33,6 +35,7 @@ public class BoardController implements ExceptionProcessor {
     private final FileInfoService fileInfoService;
     private final BoardFormValidator boardFormValidator;
     private final MemberUtil memberUtil;
+    private final BoardSaveService boardSaveService;
 
     private Board board; // 게시판 설정
 
@@ -125,11 +128,12 @@ public class BoardController implements ExceptionProcessor {
             return utils.tpl("board/" + mode);
         }
 
+        // 게시글 저장 처리
+        BoardData boardData = boardSaveService.save(form);
 
-        Long seq = 0L; // 임시
-
+        // 리턴 페이지가 view 인지 list인지 확인후 반환
         String redirectURL = "redirect:/board/";
-        redirectURL += board.getLocationAfterWriting() == "view" ? "view/" + seq : "list/" + form.getBid();
+        redirectURL += board.getLocationAfterWriting().equals("view") ? "view/" + boardData.getSeq() : "list/" + form.getBid();
 
         return redirectURL;
     }
@@ -196,7 +200,7 @@ public class BoardController implements ExceptionProcessor {
      * 게시판 공통 처리 : 게시글 보기, 게시글 수정 - 게시글 번호가 있는 경우
      *      - 게시글 조회 -> 게시판 설정
      *
-     * @param seq
+     * @param seq : 게시글 번호
      * @param mode
      * @param model
      */
