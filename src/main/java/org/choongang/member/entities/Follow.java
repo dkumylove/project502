@@ -9,15 +9,15 @@ import org.choongang.commons.entities.Base;
 public class Follow extends Base {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private Long seq;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="fromMember") //DB에 FK 변수명이 된다.
-    private Member fromMember;
+    @JoinColumn(name="follower")
+    private Member follower;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="toMember") //DB에 FK 변수명이 된다.
-    private Member toMember;
+    @JoinColumn(name="following")
+    private Member following;
 
 }

@@ -6,6 +6,7 @@ import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
 import org.choongang.member.service.FindPwService;
 import org.choongang.member.service.JoinService;
+import org.choongang.member.service.MemberInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -20,7 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@SessionAttributes("EmailAuthVerified")
+@SessionAttributes("EmailAuthVerified")  // 특정 모델 속성을 세션에 유지하도록 지정
 public class MemberController implements ExceptionProcessor {
 
     private final Utils utils;
@@ -28,6 +29,7 @@ public class MemberController implements ExceptionProcessor {
     private final JoinService joinService;
     //private final MemberUtil memberUtil;
     private final FindPwService findPwService;
+    private final MemberInfo memberInfo;
 
     @GetMapping("/join")
     public String join(@ModelAttribute RequestJoin form, Model model) {
@@ -175,5 +177,10 @@ public class MemberController implements ExceptionProcessor {
         model.addAttribute("addScript", addScript);
         model.addAttribute("addCommonScript", addCommonScript);
     }
+
+
+//    private String MemberDetail(Model model) {
+//
+//    }
 
 }
