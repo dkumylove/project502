@@ -45,4 +45,6 @@ public class Member extends Base {
 
     @Transient  // 내부사용목적
     private FileInfo profileImage;   // path, url
+
+    
 }

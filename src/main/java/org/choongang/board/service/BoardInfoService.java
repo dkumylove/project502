@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.controllers.BoardDataSearch;
 import org.choongang.board.controllers.RequestBoard;
-import org.choongang.board.entities.Board;
-import org.choongang.board.entities.BoardData;
-import org.choongang.board.entities.BoardView;
-import org.choongang.board.entities.QBoardData;
+import org.choongang.board.entities.*;
 import org.choongang.board.repositories.BoardDataRepository;
 import org.choongang.board.repositories.BoardViewRepository;
 import org.choongang.board.service.config.BoardConfigInfoService;
@@ -210,11 +207,23 @@ public class BoardInfoService {
      * @param seq : 게시글 번호
      */
     public void updateViewCount(Long seq) {
+        BoardData data = boardDataRepository.findById(seq).orElse(null);
+        if(data == null) return;
 
-        // 로그인 시에는 회원번호, 아닐떄는 게스트uid로
-        int uid = memberUtil.isLogin() ? memberUtil.getMember().getSeq().intValue() : utils.guestUid();
-        BoardView boardView = new BoardView(seq, uid);
+        try {
+            // 로그인 시에는 회원번호, 아닐떄는 게스트uid로
+            int uid = memberUtil.isLogin() ? memberUtil.getMember().getSeq().intValue() : utils.guestUid();
+            BoardView boardView = new BoardView(seq, uid);
 
-        boardViewRepository.saveAndFlush(boardView);
+            boardViewRepository.saveAndFlush(boardView);
+        } catch (Exception e) {}
+
+        // 조회수 카운팅 => 게시글 업데이트
+        QBoardView bv = QBoardView.boardView;
+        int viewCount = (int) boardViewRepository.count(bv.seq.eq(seq));
+
+        data.setViewCount(viewCount);
+
+        boardViewRepository.flush();
     }
 }

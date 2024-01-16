@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="default" th:object="${boardData}">
     <div class="board_view layout_width">
+        <h1 th:replace="~{front/board/skins/default/_board_title::title}"></h1>
         <div class="subject">
            <span th:if="*{!#strings.isEmpty(category)}" class="category"
                  th:text="*{'[' + category + ']'}"></span>
@@ -32,6 +33,7 @@
             </div>
         </div>
         <!--// post_info -->
+
         <div class="content" th:utext="*{content}"></div>
 
         <ul th:if="*{attachFiles != null && !attachFiles.isEmpty()}" class="downloads">
@@ -40,7 +42,6 @@
                 <a th:href="@{/file/download/{seq}(seq=*{seq})}" th:text="*{fileName}"></a>
             </li>
         </ul>
-
 
         <div class="board_btns">
             <a th:href="@{/board/write/{bid}(bid=${board.bid})}" th:text="#{글쓰기}" class="btn"></a>
