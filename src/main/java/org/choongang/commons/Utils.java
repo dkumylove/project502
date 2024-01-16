@@ -264,4 +264,17 @@ public class Utils {
     public String[] getParams(String name) {
         return request.getParameterValues(name);
     }
+
+    /**
+     * 비회원 uid(Unique ID)
+     *      ip + 브라우저 정보
+     * @return
+     */
+    public int guestUid() {
+        String ip = request.getRemoteAddr();
+        String ua = request.getHeader("User-Agent");
+
+        return Objects.hash(ip, ua);
+    }
+
 }

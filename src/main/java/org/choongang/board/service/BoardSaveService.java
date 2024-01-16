@@ -72,7 +72,7 @@ public class BoardSaveService {
         // 비회원 비밀번호
         String guestPw = form.getGuestPw();
         if (StringUtils.hasText(guestPw)) {
-            String hash = encoder.encode(guestPw);  // 해시코드 비번 생성
+            String hash = encoder.encode(guestPw);
             data.setGuestPw(hash);
         }
 
@@ -81,7 +81,6 @@ public class BoardSaveService {
             data.setNotice(form.isNotice());
         }
 
-        // DB에 저장 처리
         boardDataRepository.saveAndFlush(data);
 
         // 파일 업로드 완료 처리
@@ -89,6 +88,5 @@ public class BoardSaveService {
 
         return data;
     }
-
 
 }

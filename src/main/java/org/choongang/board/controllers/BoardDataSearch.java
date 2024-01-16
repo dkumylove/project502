@@ -23,5 +23,7 @@ public class BoardDataSearch {
 
     private List<String> bid; // 게시판 ID
 
-    private String userId; // 마이페이지 사용
+    private String userId;
+
+    private String category; // 게시판 분류
 }

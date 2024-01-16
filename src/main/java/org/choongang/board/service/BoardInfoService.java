@@ -10,16 +10,21 @@ import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.controllers.BoardDataSearch;
+import org.choongang.board.controllers.RequestBoard;
 import org.choongang.board.entities.Board;
 import org.choongang.board.entities.BoardData;
+import org.choongang.board.entities.BoardView;
 import org.choongang.board.entities.QBoardData;
 import org.choongang.board.repositories.BoardDataRepository;
+import org.choongang.board.repositories.BoardViewRepository;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ListData;
 import org.choongang.commons.Pagination;
 import org.choongang.commons.Utils;
 import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileInfoService;
+import org.choongang.member.MemberUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -34,11 +39,14 @@ public class BoardInfoService {
     private final BoardConfigInfoService configInfoService; // 게시판 설정을 가져오기 위한 의존성
     private final FileInfoService fileInfoService;
     private final HttpServletRequest request;
+    private final BoardViewRepository boardViewRepository;
 
     private final Utils utils;
+    private final MemberUtil memberUtil;
 
     /**
      * 게시글 조회
+     *
      * @param seq : 게시글 번호
      * @return
      */
@@ -49,6 +57,27 @@ public class BoardInfoService {
 
         return boardData;
     }
+    /**
+     * BoardData -> RequestBoard
+     * @param data : 게시글 데이터(BoardData), 게시글 번호(Long)
+     * @return
+     */
+    public RequestBoard getForm(Object data) {
+        BoardData boardData = null;
+        if (data instanceof BoardData) {
+            boardData = (BoardData) data;
+        } else {
+            Long seq = (Long) data;
+            boardData = get(seq);
+        }
+
+        RequestBoard form = new ModelMapper().map(boardData, RequestBoard.class);
+        form.setMode("update");
+        form.setBid(boardData.getBoard().getBid());
+
+        return form;
+    }
+
 
 //    /**
 //     * 게시판 목록 조회
@@ -62,8 +91,9 @@ public class BoardInfoService {
 //    }
 
     /**
-     * 게시판 목록 조회 - 특정 게시판
-     * @param bid
+     * 특정 게시판 목록을 조회
+     *
+     * @param bid : 게시판 ID
      * @param search
      * @return
      */
@@ -125,6 +155,14 @@ public class BoardInfoService {
         if (StringUtils.hasText(userId)) {
             andBuilder.and(boardData.member.userId.eq(userId));
         }
+
+        // 게시글 분류 조회
+        String category = search.getCategory();
+        if (StringUtils.hasText(category)) {
+            category = category.trim();
+            andBuilder.and(boardData.category.eq(category));
+        }
+
         /* 검색 조건 처리 E */
 
         PathBuilder<BoardData> pathBuilder = new PathBuilder<>(BoardData.class, "boardData");
@@ -145,7 +183,6 @@ public class BoardInfoService {
         // 게시글 전체 갯수
         long total = boardDataRepository.count(andBuilder);
 
-        // Mobile, Pc에 따라 다르게
         int ranges = utils.isMobile() ? board.getPageCountMobile() : board.getPageCountPc();
 
         Pagination pagination = new Pagination(page, (int)total, ranges, limit, request);
@@ -155,6 +192,7 @@ public class BoardInfoService {
 
     /**
      * 게시글 추가 정보 처리
+     *
      * @param boardData
      */
     public void addBoardData(BoardData boardData) {
@@ -165,5 +203,18 @@ public class BoardInfoService {
 
         boardData.setEditorFiles(editorFiles);
         boardData.setAttachFiles(attachFiles);
+    }
+
+    /**
+     * 게시글 조회수 업데이트
+     * @param seq : 게시글 번호
+     */
+    public void updateViewCount(Long seq) {
+
+        // 로그인 시에는 회원번호, 아닐떄는 게스트uid로
+        int uid = memberUtil.isLogin() ? memberUtil.getMember().getSeq().intValue() : utils.guestUid();
+        BoardView boardView = new BoardView(seq, uid);
+
+        boardViewRepository.saveAndFlush(boardView);
     }
 }
