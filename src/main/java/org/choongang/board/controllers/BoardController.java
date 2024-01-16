@@ -3,8 +3,12 @@ package org.choongang.board.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
+import org.choongang.board.entities.BoardData;
+import org.choongang.board.service.BoardInfoService;
+import org.choongang.board.service.BoardSaveService;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ExceptionProcessor;
+import org.choongang.commons.ListData;
 import org.choongang.commons.Utils;
 import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileInfoService;
@@ -31,10 +35,14 @@ public class BoardController implements ExceptionProcessor {
     private final Utils utils;
     private final BoardConfigInfoService configInfoService;
     private final FileInfoService fileInfoService;
+    private final BoardInfoService boardInfoService;
     private final BoardFormValidator boardFormValidator;
     private final MemberUtil memberUtil;
+    private final BoardSaveService boardSaveService;
+
 
     private Board board; // 게시판 설정
+    private BoardData boardData;  //게시글
 
     /**
      * 게시판 목록
@@ -43,8 +51,13 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/list/{bid}")
-    public String list(@PathVariable("bid") String bid, Model model) {
+    public String list(@PathVariable("bid") String bid, @ModelAttribute BoardDataSearch search,  Model model) {
         commonProcess(bid, "list", model);
+
+        ListData<BoardData> data = boardInfoService.getList(bid, search);
+
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("board/list");
     }
@@ -59,6 +72,8 @@ public class BoardController implements ExceptionProcessor {
      */
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
+        boardInfoService.updateViewCount(seq);  // 조회수 업데이트
+
         commonProcess(seq, "view", model);
 
         return utils.tpl("board/view");
@@ -95,9 +110,11 @@ public class BoardController implements ExceptionProcessor {
     public String update(@PathVariable("seq") Long seq, Model model) {
         commonProcess(seq, "update", model);
 
+        RequestBoard form = boardInfoService.getForm(boardData);
+        model.addAttribute("requestBoard", form);
+
         return utils.tpl("board/update");
     }
-
 
     /**
      * 게시글 등록, 수정
@@ -113,6 +130,7 @@ public class BoardController implements ExceptionProcessor {
 
         boardFormValidator.validate(form, errors);
 
+
         if (errors.hasErrors()) {
             String gid = form.getGid();
 
@@ -126,25 +144,27 @@ public class BoardController implements ExceptionProcessor {
         }
 
 
-        Long seq = 0L; // 임시
+        // 게시글 저장 처리
+        BoardData boardData = boardSaveService.save(form);
 
+        // 리턴 페이지가 view 인지 list인지 확인후 반환
         String redirectURL = "redirect:/board/";
-        redirectURL += board.getLocationAfterWriting() == "view" ? "view/" + seq : "list/" + form.getBid();
+        redirectURL += board.getLocationAfterWriting().equals("view") ? "view/" + boardData.getSeq() : "list/" + form.getBid();
 
         return redirectURL;
     }
 
 
     /**
-     * 게시판 공통 처리 - 글목록, 글쓰기 등 게시판 ID가 있는 경우
+     * 게시판의 공통 처리 - 글목록, 글쓰기 등 게시판 ID가 있는 경우
      *
-     * @param bid : 게시판 id
+     * @param bid : 게시판 ID
      * @param mode
      * @param model
      */
-   private void commonProcess(String bid, String mode, Model model) {
+    private void commonProcess(String bid, String mode, Model model) {
 
-       mode = StringUtils.hasText(mode) ? mode : "list"; // 없으면 기본값 list
+        mode = StringUtils.hasText(mode) ? mode : "list";  // 없으면 기본값 list
 
        List<String> addCommonScript = new ArrayList<>(); // 공통 스크립트
        List<String> addScript = new ArrayList<>();  // 프론튼, 모바일쪽 스크립트
@@ -156,51 +176,60 @@ public class BoardController implements ExceptionProcessor {
 //       if(board == null) {
 //           board = configInfoService.get(bid);
 //       }  // board 한번 바꾸면 안바뀌게 설정함. 문제: DB에 변경되어도 새롭게 만들지 않음
-       board = configInfoService.get(bid);
+        board = configInfoService.get(bid);
 
-       // 스킨별 css, js 추가
-       String skin = board.getSkin();
-       addCss.add("board/skin_" + skin);
-       addScript.add("board/skin_" + skin);
+        // 스킨별 css, js 추가
+        String skin = board.getSkin();
+        addCss.add("board/skin_" + skin);
+        addScript.add("board/skin_" + skin);
 
-       model.addAttribute("board", board);
-       /* 게시판 설정 처리 E */
+        model.addAttribute("board", board);
+        /* 게시판 설정 처리 E */
 
-       String pageTitle = board.getBName(); // 게시판명이 기본 타이틀
+        String pageTitle = board.getBName(); // 게시판명이 기본 타이틀
 
-       if (mode.equals("write") || mode.equals("update")) { // 쓰기 또는 수정
-           if (board.isUseEditor()) { // 에디터 사용하는 경우
-               addCommonScript.add("ckeditor5/ckeditor");
-           }
+        if (mode.equals("write") || mode.equals("update")) { // 쓰기 또는 수정
+            if (board.isUseEditor()) { // 에디터 사용하는 경우
+                addCommonScript.add("ckeditor5/ckeditor");
+            }
 
-           // 이미지 또는 파일 첨부를 사용하는 경우
-           if (board.isUseUploadImage() || board.isUseUploadFile()) {
-               addCommonScript.add("fileManager");
-           }
+            // 이미지 또는 파일 첨부를 사용하는 경우
+            if (board.isUseUploadImage() || board.isUseUploadFile()) {
+                addCommonScript.add("fileManager");
+            }
 
-           addScript.add("board/form");
+            addScript.add("board/form");
 
-           pageTitle += " ";
-           pageTitle += mode.equals("update") ?  Utils.getMessage("글수정", "commons") :  Utils.getMessage("글쓰기", "commons");
-       }
+            pageTitle += " ";
+            pageTitle += mode.equals("update") ?  Utils.getMessage("글수정", "commons") :  Utils.getMessage("글쓰기", "commons");
 
-       model.addAttribute("addCommonScript", addCommonScript);
-       model.addAttribute("addScript", addScript);
-       model.addAttribute("addCommonCss", addCommonCss);
-       model.addAttribute("addCss", addCss);
-       model.addAttribute("pageTitle", pageTitle);
+        } else if (mode.equals("view")) {
+            // pageTitle - 글 제목 - 게시판 명
+            pageTitle = String.format("%s | %s", boardData.getSubject(), board.getBName());
+        }
 
-   }
+        model.addAttribute("addCommonCss", addCommonCss);
+        model.addAttribute("addCss", addCss);
+        model.addAttribute("addCommonScript", addCommonScript);
+        model.addAttribute("addScript", addScript);
+        model.addAttribute("pageTitle", pageTitle);
+    }
+
 
     /**
      * 게시판 공통 처리 : 게시글 보기, 게시글 수정 - 게시글 번호가 있는 경우
      *      - 게시글 조회 -> 게시판 설정
      *
-     * @param seq
+     * @param seq : 게시글 번호
      * @param mode
      * @param model
      */
     private void commonProcess(Long seq, String mode, Model model) {
+        boardData = boardInfoService.get(seq);
 
+        String bid = boardData.getBoard().getBid();
+        commonProcess(bid, mode, model);
+
+        model.addAttribute("boardData", boardData);
     }
 }

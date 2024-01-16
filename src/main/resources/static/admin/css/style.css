@@ -122,3 +122,15 @@ select { border: 1px solid #d5d5d5; height: 35px;}
 
 
 
+.top_box {
+    padding: 10px 50px 50px;
+}
+* {
+    box-sizing: border-box;
+    outline: none;
+    font-family: 'Nanum Gothic', sans-serif;
+}
+user agent stylesheet
+div {
+    display: block;
+}
