@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
 import org.choongang.board.entities.BoardData;
+import org.choongang.board.service.BoardDeleteService;
 import org.choongang.board.service.BoardInfoService;
 import org.choongang.board.service.BoardSaveService;
 import org.choongang.board.service.config.BoardConfigInfoService;
@@ -39,6 +40,7 @@ public class BoardController implements ExceptionProcessor {
     private final BoardFormValidator boardFormValidator;
     private final MemberUtil memberUtil;
     private final BoardSaveService boardSaveService;
+    private final BoardDeleteService boardDeleteService;
 
 
     private Board board; // 게시판 설정
@@ -71,10 +73,19 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/view/{seq}")
-    public String view(@PathVariable("seq") Long seq, Model model) {
+    public String view(@PathVariable("seq") Long seq, @ModelAttribute BoardDataSearch search, Model model) {
         boardInfoService.updateViewCount(seq);  // 조회수 업데이트
 
         commonProcess(seq, "view", model);
+
+        // 게시글 보기 하단 목록 노출 s
+        if (board.isShowListBelowView()) {
+            ListData<BoardData> data = boardInfoService.getList(board.getBid(), search);
+
+            model.addAttribute("items", data.getItems());
+            model.addAttribute("pagination", data.getPagination());
+        }
+        // 게시글 보기 하단 목록 노출 e
 
         return utils.tpl("board/view");
     }
@@ -152,6 +163,16 @@ public class BoardController implements ExceptionProcessor {
         redirectURL += board.getLocationAfterWriting().equals("view") ? "view/" + boardData.getSeq() : "list/" + form.getBid();
 
         return redirectURL;
+    }
+
+    @GetMapping("/delete/{seq}")
+    public String delete(@PathVariable("seq") Long seq, Model model) {
+
+        commonProcess(seq, "delete", model);
+
+        boardDeleteService.delete(seq);
+
+        return "redirect:/board/list/" + board.getBid();
     }
 
 
