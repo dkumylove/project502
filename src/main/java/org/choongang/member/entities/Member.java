@@ -30,10 +30,21 @@ public class Member extends Base {
     @Column(length=40, nullable = false)
     private String name;
 
+    @Column(length=10)
+    private String zonecode;
+
+    @Column(length=100)
+    private String address;
+
+    @Column(length=100)
+    private String addressSub;
+
     @ToString.Exclude  // 순환참조 방지
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Authorities> authorities = new ArrayList<>();
 
     @Transient  // 내부사용목적
     private FileInfo profileImage;   // path, url
+
+    
 }
