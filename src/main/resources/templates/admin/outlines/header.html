@@ -4,7 +4,9 @@
 
     <header th:fragment="common">
         <section class="logo_area">
-            <a th:href="@{/admin}">로고</a>
+            <a th:href="@{/}">
+                <img th:src="@{/common/image/logo.png}">
+            </a>
         </section>
         <section class="btn_area">
             <th:block sec:authorize="isAuthenticated()">

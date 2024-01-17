@@ -5,7 +5,6 @@ import org.choongang.member.entities.Authorities;
 import org.choongang.member.entities.Member;
 import org.choongang.member.repositories.AuthoritiesRepository;
 import org.choongang.member.repositories.MemberRepository;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +22,7 @@ class ProjectApplicationTests {
 	/**
 	 * 관리자 권한부여
 	 */
-	@Test @Disabled  // 실행되지 않음
+	@Test //@Disabled  // 실행되지 않음
 	void contextLoads() {
 		Member member = memberRepository.findByUserId("user02").orElse(null);
 

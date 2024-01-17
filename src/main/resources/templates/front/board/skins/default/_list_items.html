@@ -7,7 +7,7 @@
             <a th:href="@{/board/write/{bid}(bid=${board.bid})}" th:text="#{글쓰기}" class="write_btn"></a>
         </div>
 
-        <!--상단배너 노출 안하기 위해 -->
+        <!--상단배너 노출 안하기 위해 boardData == null-->
         <th:block th:if="${boardData == null && !#strings.isEmpty(board.htmlTop)}" th:utext="${board.htmlTop}"></th:block>
 
         <div class="total">
@@ -64,7 +64,7 @@
 
         <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 
-        <!-- 하단 배너 안보이게 하기 위해 -->
+        <!-- 하단 배너 안보이게 하기 위해 boardData == null -->
         <th:block th:if="${boardData == null && !#strings.isEmpty(board.htmlBottom)}" th:utext="${board.htmlBottom}"></th:block>
 
     </div>

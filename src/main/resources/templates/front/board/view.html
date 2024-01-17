@@ -23,6 +23,7 @@
         <th:block th:replace="~{front/board/skins/blog/view::blog}"></th:block>
     </th:block>
 
+    <!--th:if="${board.showListBelowView}" board.showListBelowView 있으면 노출시킴-->
     <th:block th:if="${board.showListBelowView}">
         <th:block th:replace="~{front/board/_list_items::items}"></th:block>
     </th:block>
