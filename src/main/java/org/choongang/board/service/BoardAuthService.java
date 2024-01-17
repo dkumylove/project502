@@ -8,6 +8,7 @@ import org.choongang.commons.exceptions.AlertException;
 import org.choongang.commons.exceptions.UnAuthorizedException;
 import org.choongang.member.entities.Member;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +18,7 @@ public class BoardAuthService {
 
     private final BoardInfoService infoService;
     private final HttpSession session;
+    private final PasswordEncoder encoder;
 
     /**
      * 게시글 관련 권한 체크
@@ -57,6 +59,32 @@ public class BoardAuthService {
 
         String mode = (String)session.getAttribute("mode");
         Long seq = (Long)session.getAttribute("seq");
+
+        mode = StringUtils.hasText(mode) ? mode : "update";
+
+        String key = null;
+
+        if(mode.equals("update") || mode.equals("delete")) {  // 비회원 게시글
+            BoardData data = infoService.get(seq);
+
+            boolean match = encoder.matches(password, data.getGuestPw());
+
+            if(!match) {
+                throw new AlertException(Utils.getMessage("Mismatch.password"), HttpStatus.BAD_REQUEST);
+            }
+
+            key = "guest_confirmed_" + seq;
+
+        } else if(mode.equals("comment_update") || mode.equals("comment_delete")) {  // 비회원 댓글
+
+            key = "guest_comment_confirmed_" + seq;
+        }
+        // 비밀번호 인증 성공 처리
+        session.setAttribute(key, true);
+
+        // 세션에 값 비우기
+        session.removeAttribute("mode");
+        session.removeAttribute("seq");
     }
 
 }
