@@ -71,10 +71,19 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/view/{seq}")
-    public String view(@PathVariable("seq") Long seq, Model model) {
+    public String view(@PathVariable("seq") Long seq, @ModelAttribute BoardDataSearch search, Model model) {
         boardInfoService.updateViewCount(seq);  // 조회수 업데이트
 
         commonProcess(seq, "view", model);
+
+        // 게시글 보기 하단 목록 노출 s
+        if (board.isShowListBelowView()) {
+            ListData<BoardData> data = boardInfoService.getList(board.getBid(), search);
+
+            model.addAttribute("items", data.getItems());
+            model.addAttribute("pagination", data.getPagination());
+        }
+        // 게시글 보기 하단 목록 노출 e
 
         return utils.tpl("board/view");
     }
