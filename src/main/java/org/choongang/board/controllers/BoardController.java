@@ -1,5 +1,7 @@
 package org.choongang.board.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.entities.Board;
@@ -7,6 +9,7 @@ import org.choongang.board.entities.BoardData;
 import org.choongang.board.service.BoardDeleteService;
 import org.choongang.board.service.BoardInfoService;
 import org.choongang.board.service.BoardSaveService;
+import org.choongang.board.service.GuestPasswordCheckException;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.ListData;
@@ -252,5 +255,16 @@ public class BoardController implements ExceptionProcessor {
         commonProcess(bid, mode, model);
 
         model.addAttribute("boardData", boardData);
+    }
+
+    @Override
+    @ExceptionHandler(Exception.class)
+    public String errorHandler(Exception e, HttpServletResponse response, HttpServletRequest request, Model model) {
+
+        if (e instanceof GuestPasswordCheckException) {  // 비회원 게시글 비밀번호 확인 필요한 경우
+            return Utils.tpl("board/password");
+        }
+
+        return ExceptionProcessor.super.errorHandler(e, response, request, model);
     }
 }
