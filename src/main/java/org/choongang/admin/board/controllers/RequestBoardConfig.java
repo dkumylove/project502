@@ -41,6 +41,8 @@ public class RequestBoardConfig {
 
     private String locationAfterWriting = "list"; // 글 작성 후 이동 위치
 
+    private boolean showListBelowView;  // 글보기 하단 게시글 목록 노출여부
+
     private String skin = "default"; // 스킨
 
     private String category; // 게시판 분류
