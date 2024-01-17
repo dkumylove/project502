@@ -8,7 +8,7 @@
         </div>
 
         <!--상단배너 노출 안하기 위해 -->
-        <th:block th:if="${boardDate == null && !#strings.isEmpty(board.htmlTop)}" th:utext="${board.htmlTop}"></th:block>
+        <th:block th:if="${boardData == null && !#strings.isEmpty(board.htmlTop)}" th:utext="${board.htmlTop}"></th:block>
 
         <div class="total">
             Total : <th:block
@@ -64,6 +64,7 @@
 
         <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 
+        <!-- 하단 배너 안보이게 하기 위해 -->
         <th:block th:if="${boardData == null && !#strings.isEmpty(board.htmlBottom)}" th:utext="${board.htmlBottom}"></th:block>
 
     </div>
