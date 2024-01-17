@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 public interface ExceptionProcessor {
 
-
     @ExceptionHandler(Exception.class)
     default String errorHandler(Exception e, HttpServletResponse response, HttpServletRequest request, Model model) {
 
@@ -38,6 +37,7 @@ public interface ExceptionProcessor {
 
             model.addAttribute("script", script);
             return "common/_execute_script";
+
         }
 
         model.addAttribute("status", status.value());

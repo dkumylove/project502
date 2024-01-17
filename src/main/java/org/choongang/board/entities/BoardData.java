@@ -35,7 +35,7 @@ public class BoardData extends Base {
     private String gid = UUID.randomUUID().toString();
 
     @Column(length=60)
-    private String category;  // 분류
+    private String category; // 분류
 
     @Column(length=40, nullable = false)
     private String poster; // 작성자
@@ -81,24 +81,23 @@ public class BoardData extends Base {
     private String longText3; // 추가 필드 : 여러줄 텍스트
 
     @Transient
-    private List<FileInfo> editorFiles;  //에디터 첨부 파일
+    private List<FileInfo> editorFiles; // 에디터 첨부 파일
 
     @Transient
-    private List<FileInfo> attachFiles;  // 첨부파일
+    private List<FileInfo> attachFiles; // 첨부 파일
 
     @Transient
-    private boolean editable;  // 수정 가능 여부
+    private boolean editable; // 수정 가능 여부
 
     @Transient
-    private boolean deletable;  // 삭제 가능 여부
+    private boolean deletable; // 삭제 가능 여부
 
     @Transient
-    private boolean mine;  // 게시글 소유자
+    private boolean mine; // 게시글 소유자
 
     @Transient
-    private boolean showEditButton;  // 수정 버튼 노출여부
+    private boolean showEditButton; // 수정 버튼 노출 여부
 
     @Transient
-    private boolean showDeleteButton;  // 삭제 버튼 노출여부
-
+    private boolean showDeleteButton; // 삭제 버튼 노출 여부
 }

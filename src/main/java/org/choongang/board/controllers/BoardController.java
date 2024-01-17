@@ -156,11 +156,9 @@ public class BoardController implements ExceptionProcessor {
             return utils.tpl("board/" + mode);
         }
 
-
         // 게시글 저장 처리
         BoardData boardData = boardSaveService.save(form);
 
-        // 리턴 페이지가 view 인지 list인지 확인후 반환
         String redirectURL = "redirect:/board/";
         redirectURL += board.getLocationAfterWriting().equals("view") ? "view/" + boardData.getSeq() : "list/" + form.getBid();
 
@@ -217,9 +215,8 @@ public class BoardController implements ExceptionProcessor {
 //       }  // board 한번 바꾸면 안바뀌게 설정함. 문제: DB에 변경되어도 새롭게 만들지 않음
         board = configInfoService.get(bid);
 
-        // 접근 권한
+        // 접근 권한 체크
         boardAuthService.accessCheck(mode, board);
-
 
         // 스킨별 css, js 추가
         String skin = board.getSkin();
@@ -258,7 +255,6 @@ public class BoardController implements ExceptionProcessor {
         model.addAttribute("pageTitle", pageTitle);
     }
 
-
     /**
      * 게시판 공통 처리 : 게시글 보기, 게시글 수정 - 게시글 번호가 있는 경우
      *      - 게시글 조회 -> 게시판 설정
@@ -283,7 +279,8 @@ public class BoardController implements ExceptionProcessor {
     @ExceptionHandler(Exception.class)
     public String errorHandler(Exception e, HttpServletResponse response, HttpServletRequest request, Model model) {
 
-        if (e instanceof GuestPasswordCheckException) {  // 비회원 게시글 비밀번호 확인 필요한 경우
+        if (e instanceof GuestPasswordCheckException) {
+
             return utils.tpl("board/password");
         }
 

@@ -191,6 +191,26 @@ public class BoardInfoService {
     }
 
     /**
+     * 최신 게시글
+     *
+     * @param bid : 게시판 아이디
+     * @param limit : 조회할 갯수
+     * @return
+     */
+    public List<BoardData> getLatest(String bid, int limit) {
+        BoardDataSearch search = new BoardDataSearch();
+        search.setLimit(limit);
+
+        ListData<BoardData> data = getList(bid, search);
+
+        return data.getItems();
+    }
+
+    public List<BoardData> getLatest(String bid) {
+        return getLatest(bid, 10);
+    }
+
+    /**
      * 게시글 추가 정보 처리
      *
      * @param boardData
@@ -248,11 +268,12 @@ public class BoardInfoService {
         boardData.setShowDeleteButton(showDeleteButton);
 
         /* 수정, 삭제 권한 정보 처리 E */
-
     }
+
 
     /**
      * 게시글 조회수 업데이트
+     *
      * @param seq : 게시글 번호
      */
     public void updateViewCount(Long seq) {
@@ -276,5 +297,6 @@ public class BoardInfoService {
         data.setViewCount(viewCount);
 
         boardViewRepository.flush();
+
     }
 }

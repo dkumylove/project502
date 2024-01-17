@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="items">
-
-    <!-- 스킨에 따라 안내하는 대문 페이지-->
-
     <th:block th:if="${board.skin == null || board.skin == 'default'}">
         <th:block th:replace="~{front/board/skins/default/_list_items::default}"></th:block>
     </th:block>
@@ -23,6 +20,5 @@
     <th:block th:if="${board.skin == 'blog'}">
         <th:block th:replace="~{front/board/skins/blog/_list_items::blog}"></th:block>
     </th:block>
-
 </th:block>
 </html>

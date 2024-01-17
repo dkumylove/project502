@@ -29,31 +29,33 @@ public class BoardAuthService {
     /**
      * 게시글 관련 권한 체크
      *
-     * @param mode : update, delete
+     * @param mode
+     *          update, delete
+     *
      * @param seq : 게시글 번호
      */
     public void check(String mode, Long seq) {
-        if(memberUtil.isAdmin()) {  // 관리자는 체크 불필요
-
+        if (memberUtil.isAdmin()) { // 관리자는 체크 불필요
+            return;
         }
 
         BoardData data = infoService.get(seq);
 
-        if ((mode.equals("update") && !data.isEditable()) || (mode.equals("delete") && !data.isDeletable())) {
+        if ((mode.equals("update") && !data.isEditable())
+                || (mode.equals("delete") && !data.isDeletable())) {
             Member member = data.getMember();
+
             // 비회원 -> 비밀번호 확인 필요
-            if(member == null) {
-                // 세션값 추가e
+            if (member == null) {
                 session.setAttribute("mode", mode);
                 session.setAttribute("seq", seq);
 
                 throw new GuestPasswordCheckException();
             }
 
-            // 회원 -> alert -> back
+            // 회원인 경우 -> alert -> back
             throw new UnAuthorizedException();
         }
-
     }
 
     /**
@@ -83,17 +85,16 @@ public class BoardAuthService {
 
         } else if (mode.equals("comment_update") || mode.equals("comment_delete")) { // 비회원 댓글
 
+
             key = "guest_comment_confirmed_" + seq;
         }
 
         // 비밀번호 인증 성공 처리
         session.setAttribute(key, true);
 
-        // 세션에 값 비우기
         session.removeAttribute("mode");
         session.removeAttribute("seq");
     }
-
 
     /**
      * 글쓰기, 글보기, 글목록 접근 권한 체크
@@ -139,5 +140,4 @@ public class BoardAuthService {
             throw new UnAuthorizedException();
         }
     }
-
 }
