@@ -19,6 +19,10 @@ class ProjectApplicationTests {
 	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
 
+
+	/**
+	 * 관리자 권한부여
+	 */
 	@Test @Disabled  // 실행되지 않음
 	void contextLoads() {
 		Member member = memberRepository.findByUserId("user02").orElse(null);

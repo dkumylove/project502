@@ -94,5 +94,4 @@ public class BoardSaveService {
 
         return data;
     }
-
 }

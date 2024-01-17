@@ -39,11 +39,11 @@ public class BoardAuthService {
 
         BoardData data = infoService.get(seq);
 
-        if ((mode.equals("update") && !data.isEditable()) || (mode.equals("delete") && !data.isDaletable())) {
+        if ((mode.equals("update") && !data.isEditable()) || (mode.equals("delete") && !data.isDeletable())) {
             Member member = data.getMember();
             // 비회원 -> 비밀번호 확인 필요
             if(member == null) {
-                // 세션값 추가
+                // 세션값 추가e
                 session.setAttribute("mode", mode);
                 session.setAttribute("seq", seq);
 

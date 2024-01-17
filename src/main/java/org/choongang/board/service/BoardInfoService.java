@@ -56,6 +56,7 @@ public class BoardInfoService {
 
         return boardData;
     }
+
     /**
      * BoardData -> RequestBoard
      * @param data : 게시글 데이터(BoardData), 게시글 번호(Long)
@@ -195,7 +196,7 @@ public class BoardInfoService {
      * @param boardData
      */
     public void addBoardData(BoardData boardData) {
-        /* 파일 정보 추가 s */
+        /* 파일 정보 추가 S */
         String gid = boardData.getGid();
 
         List<FileInfo> editorFiles = fileInfoService.getListDone(gid, "editor");
@@ -203,51 +204,50 @@ public class BoardInfoService {
 
         boardData.setEditorFiles(editorFiles);
         boardData.setAttachFiles(attachFiles);
-        /* 파일 정보 추가 e */
+        /* 파일 정보 추가 E */
 
-        /* 수정 삭제 권한 정보 처리 s */
+        /* 수정, 삭제 권한 정보 처리 S */
         boolean editable = false, deletable = false, mine = false;
-
-        Member _member = boardData.getMember();  // null - 비회원, x null ->회원
+        Member _member = boardData.getMember(); // null - 비회원, X null -> 회원
 
         // 관리자 -> 삭제, 수정 모두 가능
-        if(memberUtil.isAdmin()) {
+        if (memberUtil.isAdmin()) {
             editable = true;
             deletable = true;
         }
 
         // 회원 -> 직접 작성한 게시글만 삭제, 수정 가능
         Member member = memberUtil.getMember();
-        if (_member != null && memberUtil.isLogin() && _member.getUserId().equals(_member.getUserId())) {
+        if (_member != null && memberUtil.isLogin() && _member.getUserId().equals(member.getUserId())) {
             editable = true;
             deletable = true;
             mine = true;
         }
 
-        // 비회원 -> 비회원 비밀번호가 확인된 경우 삭제, 수정 가능
-        // 비회원 비밀번호 인증 여부 세션에 있는 guest_confirmed_게시글번호 가 true 이면 -> 인증
+        // 비회원 -> 비회원 비밀번호가 확인 된 경우 삭제, 수정 가능
+        // 비회원 비밀번호 인증 여부 세션에 있는 guest_confirmed_게시글번호 true -> 인증
         HttpSession session = request.getSession();
         String key = "guest_confirmed_" + boardData.getSeq();
-        Boolean guestConfirmed = (Boolean) session.getAttribute(key);
-
-        if(_member == null && guestConfirmed != null && guestConfirmed) {
+        Boolean guestConfirmed = (Boolean)session.getAttribute(key);
+        if (_member == null && guestConfirmed != null && guestConfirmed) {
             editable = true;
             deletable = true;
             mine = true;
         }
 
         boardData.setEditable(editable);
-        boardData.setDaletable(deletable);
+        boardData.setDeletable(deletable);
         boardData.setMine(mine);
 
-        // 수정, 삭제 버튼 노출 여부
-        // 관리자 - 노출, 회원 게시글 - 직접 작성한 게시글 , 비회원
+        // 수정 버튼 노출 여부
+        // 관리자 - 노출, 회원 게시글 - 직접 작성한 게시글, 비회원
         boolean showEditButton = memberUtil.isAdmin() || mine || _member == null;
         boolean showDeleteButton = showEditButton;
 
         boardData.setShowEditButton(showEditButton);
         boardData.setShowDeleteButton(showDeleteButton);
-        /* 수정 삭제 권한 정보 처리 e */
+
+        /* 수정, 삭제 권한 정보 처리 E */
 
     }
 
@@ -256,20 +256,22 @@ public class BoardInfoService {
      * @param seq : 게시글 번호
      */
     public void updateViewCount(Long seq) {
+
         BoardData data = boardDataRepository.findById(seq).orElse(null);
-        if(data == null) return;
+        if (data == null) return;
 
         try {
-            // 로그인 시에는 회원번호, 아닐떄는 게스트uid로
-            int uid = memberUtil.isLogin() ? memberUtil.getMember().getSeq().intValue() : utils.guestUid();
+            int uid = memberUtil.isLogin() ?
+                    memberUtil.getMember().getSeq().intValue() : utils.guestUid();
+
             BoardView boardView = new BoardView(seq, uid);
 
             boardViewRepository.saveAndFlush(boardView);
         } catch (Exception e) {}
 
-        // 조회수 카운팅 => 게시글 업데이트
+        // 조회수 카운팅 -> 게시글에 업데이트
         QBoardView bv = QBoardView.boardView;
-        int viewCount = (int) boardViewRepository.count(bv.seq.eq(seq));
+        int viewCount = (int)boardViewRepository.count(bv.seq.eq(seq));
 
         data.setViewCount(viewCount);
 

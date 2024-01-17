@@ -54,7 +54,8 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/list/{bid}")
-    public String list(@PathVariable("bid") String bid, @ModelAttribute BoardDataSearch search,  Model model) {
+    public String list(@PathVariable("bid") String bid,
+                       @ModelAttribute BoardDataSearch search, Model model) {
         commonProcess(bid, "list", model);
 
         ListData<BoardData> data = boardInfoService.getList(bid, search);
@@ -74,19 +75,20 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/view/{seq}")
-    public String view(@PathVariable("seq") Long seq, @ModelAttribute BoardDataSearch search, Model model) {
-        boardInfoService.updateViewCount(seq);  // 조회수 업데이트
+    public String view(@PathVariable("seq") Long seq,
+                       @ModelAttribute BoardDataSearch search, Model model) {
+        boardInfoService.updateViewCount(seq); // 조회수 업데이트
 
         commonProcess(seq, "view", model);
 
-        // 게시글 보기 하단 목록 노출 s
+        // 게시글 보기 하단 목록 노출 S
         if (board.isShowListBelowView()) {
             ListData<BoardData> data = boardInfoService.getList(board.getBid(), search);
 
             model.addAttribute("items", data.getItems());
             model.addAttribute("pagination", data.getPagination());
         }
-        // 게시글 보기 하단 목록 노출 e
+        // 게시글 보기 하단 목록 노출 E
 
         return utils.tpl("board/view");
     }
@@ -142,7 +144,6 @@ public class BoardController implements ExceptionProcessor {
 
         boardFormValidator.validate(form, errors);
 
-
         if (errors.hasErrors()) {
             String gid = form.getGid();
 
@@ -168,7 +169,6 @@ public class BoardController implements ExceptionProcessor {
 
     @GetMapping("/delete/{seq}")
     public String delete(@PathVariable("seq") Long seq, Model model) {
-
         commonProcess(seq, "delete", model);
 
         boardDeleteService.delete(seq);
@@ -216,6 +216,10 @@ public class BoardController implements ExceptionProcessor {
 //           board = configInfoService.get(bid);
 //       }  // board 한번 바꾸면 안바뀌게 설정함. 문제: DB에 변경되어도 새롭게 만들지 않음
         board = configInfoService.get(bid);
+
+        // 접근 권한
+        boardAuthService.accessCheck(mode, board);
+
 
         // 스킨별 css, js 추가
         String skin = board.getSkin();

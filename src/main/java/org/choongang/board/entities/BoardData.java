@@ -90,7 +90,7 @@ public class BoardData extends Base {
     private boolean editable;  // 수정 가능 여부
 
     @Transient
-    private boolean daletable;  // 삭제 가능 여부
+    private boolean deletable;  // 삭제 가능 여부
 
     @Transient
     private boolean mine;  // 게시글 소유자
