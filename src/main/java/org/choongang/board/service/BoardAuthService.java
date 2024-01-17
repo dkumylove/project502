@@ -31,6 +31,7 @@ public class BoardAuthService {
             Member member = data.getMember();
             // 비회원 -> 비밀번호 확인 필요
             if(member == null) {
+                // 세션값 추가
                 session.setAttribute("mode", mode);
                 session.setAttribute("seq", seq);
 
