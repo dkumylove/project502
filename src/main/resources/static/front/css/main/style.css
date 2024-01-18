@@ -7,3 +7,5 @@
 .board_latest a:hover { text-decoration: underline; }
 .board_latest .items > li a { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; display: block; height: 35px; width: calc(100% - 1px); line-height: 35px; padding: 0 10px; }
 .board_latest .items > li + li { border-top: 1px dashed #d5d5d5; }
+
+/* ellipsis : 말줄임 */
