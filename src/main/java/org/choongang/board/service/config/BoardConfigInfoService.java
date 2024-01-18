@@ -95,6 +95,8 @@ public class BoardConfigInfoService {
      * @return
      */
     public ListData<Board> getList(BoardSearch search, boolean isAll) {
+        // boolean isAll => 참이면 전부다, 아니면 active 활성화 되어 있는 것만
+
         int page = Utils.onlyPositiveNumber(search.getPage(), 1);
         int limit = Utils.onlyPositiveNumber(search.getLimit(), 20);
 
@@ -174,7 +176,10 @@ public class BoardConfigInfoService {
     public List<Board> getList() {
         QBoard board = QBoard.board;
 
-        List<Board> items = (List<Board>)boardRepository.findAll(board.active.eq(true), Sort.by(desc("listOrder"), desc("createdAt")));
+        List<Board> items = (List<Board>)boardRepository
+                .findAll(board.active.eq(true),
+                        Sort.by(desc("listOrder"),
+                                desc("createdAt")));
 
         return items;
     }
