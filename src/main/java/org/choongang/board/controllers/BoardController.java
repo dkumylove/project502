@@ -34,15 +34,17 @@ public class BoardController implements ExceptionProcessor {
      */
 
     private final Utils utils;
-    private final BoardConfigInfoService configInfoService;
+    private final MemberUtil memberUtil;
+
     private final FileInfoService fileInfoService;
     private final BoardInfoService boardInfoService;
-    private final BoardFormValidator boardFormValidator;
-    private final MemberUtil memberUtil;
+    private final BoardConfigInfoService configInfoService;
+
+    private final BoardAuthService boardAuthService;
     private final BoardSaveService boardSaveService;
     private final BoardDeleteService boardDeleteService;
-    private final BoardAuthService boardAuthService;
 
+    private final BoardFormValidator boardFormValidator;
 
     private Board board; // 게시판 설정
     private BoardData boardData;  //게시글
@@ -165,6 +167,12 @@ public class BoardController implements ExceptionProcessor {
         return redirectURL;
     }
 
+    /**
+     * 게시글 삭제
+     * @param seq
+     * @param model
+     * @return
+     */
     @GetMapping("/delete/{seq}")
     public String delete(@PathVariable("seq") Long seq, Model model) {
         commonProcess(seq, "delete", model);

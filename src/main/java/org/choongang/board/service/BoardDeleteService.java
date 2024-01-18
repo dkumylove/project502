@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class BoardDeleteService {
+
     private final BoardDataRepository boardDataRepository;
     private final BoardInfoService boardInfoService;
     private final FileDeleteService fileDeleteService;

@@ -41,8 +41,8 @@ public class BoardAuthService {
 
         BoardData data = infoService.get(seq);
 
-        if ((mode.equals("update") && !data.isEditable())
-                || (mode.equals("delete") && !data.isDeletable())) {
+        if ((mode.equals("update") && !data.isEditable())  // mode : update, 수정권한없음
+                || (mode.equals("delete") && !data.isDeletable())) {  //mode : delete, 삭제권한없음
             Member member = data.getMember();
 
             // 비회원 -> 비밀번호 확인 필요
@@ -65,17 +65,19 @@ public class BoardAuthService {
      */
     public void validate(String password) {
 
-        if (!StringUtils.hasText(password)) {
+        if (!StringUtils.hasText(password)) {  // password 없다면 예외발생
             throw new AlertException(Utils.getMessage("NotBlank.requestBoard.guestPw"), HttpStatus.BAD_REQUEST);
         }
 
         String mode = (String)session.getAttribute("mode");
         Long seq = (Long)session.getAttribute("seq");
         mode = StringUtils.hasText(mode) ? mode : "update";
+
         String key = null;
         if (mode.equals("update") || mode.equals("delete")) { // 비회원 게시글
             BoardData data = infoService.get(seq);
 
+            //matches(입력비번, 해쉬처리해 DB에 입력한 비번값)
             boolean match = encoder.matches(password, data.getGuestPw());
             if (!match) {
                 throw new AlertException(Utils.getMessage("Mismatch.password"), HttpStatus.BAD_REQUEST);

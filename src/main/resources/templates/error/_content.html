@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="common">
+        <img th:src="@{'/common/image/' + ${status} + '.svg'}">
         <h1>
             <th:block th:text="${status}"></th:block>
             <th:block th:if="${method != null}" th:text="${method}"></th:block>

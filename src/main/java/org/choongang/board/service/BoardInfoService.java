@@ -249,6 +249,7 @@ public class BoardInfoService {
         HttpSession session = request.getSession();
         String key = "guest_confirmed_" + boardData.getSeq();
         Boolean guestConfirmed = (Boolean)session.getAttribute(key);
+        //   회원 == null 그리고 게시글정보가 != null 그리고
         if (_member == null && guestConfirmed != null && guestConfirmed) {
             editable = true;
             deletable = true;
