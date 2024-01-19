@@ -14,7 +14,7 @@ import org.choongang.member.entities.Member;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(indexes = @Index(name="idx_comment_basic", columnList = "listOrder DESC, createdAt ASC"))
-public class CommentData extends Base {
+public class CommentData extends Base implements AuthCheck {
     @Id @GeneratedValue
     private Long seq;
 
@@ -44,4 +44,13 @@ public class CommentData extends Base {
 
     private long listOrder; // 댓글 1차 정렬 기준
     private int depth; // 대댓글 들여쓰기 정도
+
+    @Transient
+    private boolean editable; // 수정 가능 여부
+
+    @Transient
+    private boolean deletable; // 삭제 가능 여부
+
+    @Transient
+    private boolean mine; // 소유자
 }

@@ -2,8 +2,10 @@ package org.choongang.board.service;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.choongang.board.entities.AuthCheck;
 import org.choongang.board.entities.Board;
 import org.choongang.board.entities.BoardData;
+import org.choongang.board.service.comment.CommentInfoService;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.AlertException;
@@ -22,6 +24,7 @@ public class BoardAuthService {
 
     private final BoardConfigInfoService configInfoService;
     private final BoardInfoService infoService;
+    private final CommentInfoService commentInfoService;
     private final HttpSession session;
     private final PasswordEncoder encoder;
     private final MemberUtil memberUtil;
@@ -39,10 +42,17 @@ public class BoardAuthService {
             return;
         }
 
-        BoardData data = infoService.get(seq);
+        AuthCheck data = null;
+        if (mode.indexOf("comment_") != -1) { // 댓글
+            data = commentInfoService.get(seq);
+        } else { // 게시글
+            data = infoService.get(seq);
+        }
 
-        if ((mode.equals("update") && !data.isEditable())  // mode : update, 수정권한없음
-                || (mode.equals("delete") && !data.isDeletable())) {  //mode : delete, 삭제권한없음
+        System.out.println(data);
+
+        if ((mode.contains("update") && !data.isEditable())
+                || (mode.contains("delete") && !data.isDeletable())) {
             Member member = data.getMember();
 
             // 비회원 -> 비밀번호 확인 필요
@@ -65,19 +75,17 @@ public class BoardAuthService {
      */
     public void validate(String password) {
 
-        if (!StringUtils.hasText(password)) {  // password 없다면 예외발생
+        if (!StringUtils.hasText(password)) {
             throw new AlertException(Utils.getMessage("NotBlank.requestBoard.guestPw"), HttpStatus.BAD_REQUEST);
         }
 
         String mode = (String)session.getAttribute("mode");
         Long seq = (Long)session.getAttribute("seq");
         mode = StringUtils.hasText(mode) ? mode : "update";
-
         String key = null;
         if (mode.equals("update") || mode.equals("delete")) { // 비회원 게시글
             BoardData data = infoService.get(seq);
 
-            //matches(입력비번, 해쉬처리해 DB에 입력한 비번값)
             boolean match = encoder.matches(password, data.getGuestPw());
             if (!match) {
                 throw new AlertException(Utils.getMessage("Mismatch.password"), HttpStatus.BAD_REQUEST);

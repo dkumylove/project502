@@ -1,7 +1,13 @@
 package org.choongang.board.controllers.comment;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.choongang.board.entities.CommentData;
+import org.choongang.board.service.BoardAuthService;
+import org.choongang.board.service.GuestPasswordCheckException;
+import org.choongang.board.service.comment.CommentDeleteService;
 import org.choongang.board.service.comment.CommentSaveService;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
@@ -11,8 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/comment")
@@ -21,6 +26,10 @@ public class CommentController implements ExceptionProcessor {
 
     private final CommentFormValidator commentFormValidator;
     private final CommentSaveService commentSaveService;
+    private final CommentDeleteService commentDeleteService;
+    private final BoardAuthService boardAuthService;
+
+    private final Utils utils;
 
     /**
      * 댓글 저장, 수정 처리
@@ -31,8 +40,6 @@ public class CommentController implements ExceptionProcessor {
     @PostMapping("/save")
     public String save(@Valid RequestComment form, Errors errors, Model model) {
 
-        commonProcess(form.getMode(), model);
-
         commentFormValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
@@ -41,13 +48,33 @@ public class CommentController implements ExceptionProcessor {
             throw new AlertException(Utils.getMessage(error.getCodes()[0]), HttpStatus.BAD_REQUEST);
         }
 
-        commentSaveService.save(form); // 댓글 저장, 수정
+        CommentData commentData = commentSaveService.save(form); // 댓글 저장, 수정
 
-        model.addAttribute("script", "parent.location.reload();");
-        return "common/_execute_script";  // 완료되면 새로고침함
+        String script = String.format("parent.location.replace('/board/view/%d?comment_id=%d');", commentData.getBoardData().getSeq(), commentData.getSeq());
+
+        model.addAttribute("script", script);
+
+        return "common/_execute_script";
     }
 
-    private void commonProcess(String mode, Model model) {
+    @GetMapping("/delete/{seq}")
+    public String delete(@PathVariable("seq") Long seq, Model model) {
 
+        boardAuthService.check("comment_delete", seq);
+
+        Long boardDataSeq = commentDeleteService.delete(seq);
+
+        return "redirect:/board/view/" + boardDataSeq;
+    }
+
+    @Override
+    @ExceptionHandler(Exception.class)
+    public String errorHandler(Exception e, HttpServletResponse response, HttpServletRequest request, Model model) {
+
+        if (e instanceof GuestPasswordCheckException) {
+            return utils.tpl("board/password");
+        }
+
+        return ExceptionProcessor.super.errorHandler(e, response, request, model);
     }
 }
