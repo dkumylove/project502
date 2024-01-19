@@ -1,6 +1,5 @@
 package org.choongang.board.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,40 +9,39 @@ import org.choongang.commons.entities.Base;
 import org.choongang.member.entities.Member;
 
 @Data
-@Entity
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(indexes = @Index(name="idx_comment_basic", columnList = "listOrder DESC, createdAt ASC"))
-public class CommentDate extends Base {
-
+public class CommentData extends Base {
     @Id @GeneratedValue
     private Long seq;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "boardDateSeq")
+    @JoinColumn(name="boardDataSeq")
     private BoardData boardData;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberseq")
+    @JoinColumn(name="memberSeq")
     private Member member;
 
-    @Column(length = 40, nullable = false)
-    private String commenter;  // 작성자
+    @Column(length=40, nullable = false)
+    private String commenter; // 작성자
 
-    @Column(length = 65)
-    private String guestPw;  // 비회원 댓글 수정 삭제 비밀번호
+    @Column(length=65)
+    private String guestPw; // 비회원 댓글 수정, 삭제 비밀번호
 
     @Lob
     @Column(nullable = false)
     private String content; // 댓글 내용
 
-    private String ip;  // 작성자 IP주소
-    private String ua;  // 작성자 USer-Agent 정보
+    @Column(length=20)
+    private String ip; // 작성자 IP 주소
 
-    // 부모댓글
+    @Column(length=100)
+    private String ua; // 작성자 User-Agent 정보
 
-    private long listOrder;  // 댓글 1차 정렬 기준
-    private int depth;  // 대댓글 들여쓰기 정도
-
+    private long listOrder; // 댓글 1차 정렬 기준
+    private int depth; // 대댓글 들여쓰기 정도
 }
