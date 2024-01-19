@@ -15,6 +15,7 @@ import org.choongang.board.controllers.RequestBoard;
 import org.choongang.board.entities.*;
 import org.choongang.board.repositories.BoardDataRepository;
 import org.choongang.board.repositories.BoardViewRepository;
+import org.choongang.board.service.comment.CommentInfoService;
 import org.choongang.board.service.config.BoardConfigInfoService;
 import org.choongang.commons.ListData;
 import org.choongang.commons.Pagination;
@@ -36,6 +37,7 @@ public class BoardInfoService {
     private final EntityManager em; // jpa 쿼리 사용할때사용하는 의존성
     private final BoardDataRepository boardDataRepository;
     private final BoardConfigInfoService configInfoService; // 게시판 설정을 가져오기 위한 의존성
+    private final CommentInfoService commentInfoService;  // 댓글 목록을 위한 의존성
     private final FileInfoService fileInfoService;
     private final HttpServletRequest request;
     private final BoardViewRepository boardViewRepository;
@@ -53,6 +55,11 @@ public class BoardInfoService {
         BoardData boardData = boardDataRepository.findById(seq).orElseThrow(BoardDataNotFoundException::new);
 
         addBoardData(boardData);
+
+        // 댓글 목록(2차 가공) - 상세보기 떄만 필요
+        List<CommentData> comments = commentInfoService.getList(seq);
+        boardData.setComments(comments);
+
 
         return boardData;
     }
