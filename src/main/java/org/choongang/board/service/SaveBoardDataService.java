@@ -24,7 +24,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SaveBoardDataService {
-
     private final MemberUtil memberUtil;
     private final BoardInfoService boardInfoService;
     private final SaveBoardDataRepository saveBoardDataRepository;
@@ -98,17 +97,19 @@ public class SaveBoardDataService {
 
     /**
      * 찜한 게시글 목록
+     *
      * @param search
      * @return
      */
     public ListData<BoardData> getList(BoardDataSearch search) {
+
         int page = Utils.onlyPositiveNumber(search.getPage(), 1);
         int limit = Utils.onlyPositiveNumber(search.getLimit(), 20);
 
         Member member = memberUtil.getMember();
         //Long mSeq = member.getSeq();
 
-        //임시
+        // 임시
         Long mSeq = 1L;
 
         List<Long> bSeqs = saveBoardDataRepository.getBoardDataSeqs(mSeq);
@@ -117,7 +118,7 @@ public class SaveBoardDataService {
         BooleanBuilder andBuilder = new BooleanBuilder();
         andBuilder.and(boardData.seq.in(bSeqs));
 
-        /* 검색조건 처리 s */
+        /* 검색 조건 처리 S */
         String sopt = search.getSopt();
         String skey = search.getSkey();
 
@@ -162,16 +163,15 @@ public class SaveBoardDataService {
             andBuilder.and(boardData.category.eq(category.trim()));
         }
 
-        /* 검색조건 처리 e */
+        /* 검색 조건 처리 E */
 
-        Pageable pageable = PageRequest.of(page -1, limit);
+        Pageable pageable = PageRequest.of(page - 1, limit);
 
         Page<BoardData> data = boardDataRepository.findAll(andBuilder, pageable);
 
-        Pagination pagination = new Pagination(page, (int) data.getTotalElements(), 10, limit, request);
+        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), 10, limit, request);
 
         List<BoardData> items = data.getContent();
-        // 추가 데이터 정보
         items.forEach(boardInfoService::addBoardData);
 
         return new ListData<>(items, pagination);

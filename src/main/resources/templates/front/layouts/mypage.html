@@ -20,13 +20,13 @@
 
     <link rel="stylesheet" type="text/css" th:href="@{/front/css/style.css?v={v}(v=${siteConfig.cssJsVersion})}">
     <link rel="stylesheet" type="text/css" th:href="@{/front/css/mypage/style.css?v={v}(v=${siteConfig.cssJsVersion})}">
+
     <link rel="stylesheet" type="text/css"
           th:each="cssFile : ${addCss}"
           th:href="@{/front/css/{file}.css?v={v}(file=${cssFile}, v=${siteConfig.cssJsVersion})}">
 
     <th:block layout:fragment="addCss"></th:block>
 
-    <script th:src="@{/common/js/layer.js?v={v}(v=${siteConfig.cssJsVersion})}"></script>
     <script th:src="@{/common/js/common.js?v={v}(v=${siteConfig.cssJsVersion})}"></script>
     <script th:each="jsFile : ${addCommonScript}"
             th:src="@{/common/js/{file}.js?v={v}(file=${jsFile}, v=${siteConfig.cssJsVersion})}"></script>

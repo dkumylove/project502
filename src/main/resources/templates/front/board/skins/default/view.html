@@ -51,7 +51,6 @@
             </button>
         </div>
 
-
         <div class="board_btns">
             <a th:href="@{/board/write/{bid}(bid=${board.bid})}" th:text="#{글쓰기}" class="btn"></a>
 
@@ -63,7 +62,7 @@
         </div>
         <!--// btns -->
 
-        <!-- _comment추가 -->
+        <!-- 댓글 -->
         <th:block th:replace="~{front/board/skins/default/_comment::comment}"></th:block>
 
     </div>

@@ -35,6 +35,7 @@ window.addEventListener("DOMContentLoaded", function() {
             const bSeq = this.dataset.seq;
             if (this.classList.contains('on')) { // 찜한 상태 -> 해제
                 boardLib.deleteSave(bSeq);
+
                 this.classList.remove('on');
 
             } else { // 찜을 아직 안한 상태 -> 찜하기
@@ -42,13 +43,12 @@ window.addEventListener("DOMContentLoaded", function() {
                 this.classList.add('on');
             }
 
-            if (this.dataset.refrech == 'true') {
+            if (this.dataset.refresh == 'true') {
                 location.reload();
             }
         });
     }
 
     /* 찜하기 처리 E */
-
 
 });
