@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", function() {
             }
 
             if (this.dataset.refrech == 'true') {
-                location.
+                location.reload();
             }
         });
     }
