@@ -45,6 +45,11 @@ spring:
     cache: true      # 캐시가 true이면 리로드 작동 안함
     prefix: classpath:/templates/
 
+  #
+  jackson:
+    serialization:
+      failOnEmptyBeans: false
+
 # 로거 설정
 logging:
   level:

@@ -19,6 +19,15 @@ public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     private FileProperties fileProperties;
 
+//    /**
+//     * 페이지 유지 기능 : 간단하게 페이지 연동할떄 사용
+//     * 페이지에 따로 컨드롤러가 필요없는 간단한 상황
+//     */
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/").setViewName("front/main/index");
+//    }
+
     /**
      * 정적 경로 설정
      */

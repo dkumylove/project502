@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.choongang.board.controllers.comment.RequestComment;
 import org.choongang.board.entities.Board;
 import org.choongang.board.entities.BoardData;
 import org.choongang.board.service.*;
@@ -34,15 +35,17 @@ public class BoardController implements ExceptionProcessor {
      */
 
     private final Utils utils;
-    private final BoardConfigInfoService configInfoService;
+    private final MemberUtil memberUtil;
+
     private final FileInfoService fileInfoService;
     private final BoardInfoService boardInfoService;
-    private final BoardFormValidator boardFormValidator;
-    private final MemberUtil memberUtil;
+    private final BoardConfigInfoService configInfoService;
+
+    private final BoardAuthService boardAuthService;
     private final BoardSaveService boardSaveService;
     private final BoardDeleteService boardDeleteService;
-    private final BoardAuthService boardAuthService;
 
+    private final BoardFormValidator boardFormValidator;
 
     private Board board; // 게시판 설정
     private BoardData boardData;  //게시글
@@ -54,7 +57,8 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/list/{bid}")
-    public String list(@PathVariable("bid") String bid, @ModelAttribute BoardDataSearch search,  Model model) {
+    public String list(@PathVariable("bid") String bid,
+                       @ModelAttribute BoardDataSearch search, Model model) {
         commonProcess(bid, "list", model);
 
         ListData<BoardData> data = boardInfoService.getList(bid, search);
@@ -74,19 +78,29 @@ public class BoardController implements ExceptionProcessor {
      * @return
      */
     @GetMapping("/view/{seq}")
-    public String view(@PathVariable("seq") Long seq, @ModelAttribute BoardDataSearch search, Model model) {
-        boardInfoService.updateViewCount(seq);  // 조회수 업데이트
+    public String view(@PathVariable("seq") Long seq,
+                       @ModelAttribute BoardDataSearch search, Model model) {
+        boardInfoService.updateViewCount(seq); // 조회수 업데이트
 
         commonProcess(seq, "view", model);
 
-        // 게시글 보기 하단 목록 노출 s
+        // 게시글 보기 하단 목록 노출 S
         if (board.isShowListBelowView()) {
             ListData<BoardData> data = boardInfoService.getList(board.getBid(), search);
 
             model.addAttribute("items", data.getItems());
             model.addAttribute("pagination", data.getPagination());
         }
-        // 게시글 보기 하단 목록 노출 e
+        // 게시글 보기 하단 목록 노출 E
+
+        // 댓글 커맨드 객체 처리 S
+        RequestComment requestComment = new RequestComment();
+        if (memberUtil.isLogin()) {
+            requestComment.setCommenter(memberUtil.getMember().getName());
+        }
+
+        model.addAttribute("requestComment", requestComment);
+        // 댓글 커맨드 객체 처리 E
 
         return utils.tpl("board/view");
     }
@@ -142,7 +156,6 @@ public class BoardController implements ExceptionProcessor {
 
         boardFormValidator.validate(form, errors);
 
-
         if (errors.hasErrors()) {
             String gid = form.getGid();
 
@@ -155,20 +168,23 @@ public class BoardController implements ExceptionProcessor {
             return utils.tpl("board/" + mode);
         }
 
-
         // 게시글 저장 처리
         BoardData boardData = boardSaveService.save(form);
 
-        // 리턴 페이지가 view 인지 list인지 확인후 반환
         String redirectURL = "redirect:/board/";
         redirectURL += board.getLocationAfterWriting().equals("view") ? "view/" + boardData.getSeq() : "list/" + form.getBid();
 
         return redirectURL;
     }
 
+    /**
+     * 게시글 삭제
+     * @param seq
+     * @param model
+     * @return
+     */
     @GetMapping("/delete/{seq}")
     public String delete(@PathVariable("seq") Long seq, Model model) {
-
         commonProcess(seq, "delete", model);
 
         boardDeleteService.delete(seq);
@@ -211,11 +227,16 @@ public class BoardController implements ExceptionProcessor {
        List<String> addCommonCss = new ArrayList<>();  // 공통 css
        List<String> addCss = new ArrayList<>();  // 프론튼, 모바일쪽 css
 
+        addScript.add("board/common");  // 게시판 공통 스크립트
+
        /* 게시판 설정 처리 s */
 //       if(board == null) {
 //           board = configInfoService.get(bid);
 //       }  // board 한번 바꾸면 안바뀌게 설정함. 문제: DB에 변경되어도 새롭게 만들지 않음
         board = configInfoService.get(bid);
+
+        // 접근 권한 체크
+        boardAuthService.accessCheck(mode, board);
 
         // 스킨별 css, js 추가
         String skin = board.getSkin();
@@ -245,6 +266,7 @@ public class BoardController implements ExceptionProcessor {
         } else if (mode.equals("view")) {
             // pageTitle - 글 제목 - 게시판 명
             pageTitle = String.format("%s | %s", boardData.getSubject(), board.getBName());
+            addScript.add("board/view");
         }
 
         model.addAttribute("addCommonCss", addCommonCss);
@@ -253,7 +275,6 @@ public class BoardController implements ExceptionProcessor {
         model.addAttribute("addScript", addScript);
         model.addAttribute("pageTitle", pageTitle);
     }
-
 
     /**
      * 게시판 공통 처리 : 게시글 보기, 게시글 수정 - 게시글 번호가 있는 경우
@@ -279,7 +300,8 @@ public class BoardController implements ExceptionProcessor {
     @ExceptionHandler(Exception.class)
     public String errorHandler(Exception e, HttpServletResponse response, HttpServletRequest request, Model model) {
 
-        if (e instanceof GuestPasswordCheckException) {  // 비회원 게시글 비밀번호 확인 필요한 경우
+        if (e instanceof GuestPasswordCheckException) {
+
             return utils.tpl("board/password");
         }
 

@@ -94,11 +94,13 @@ public class Utils {
     }
 
     /**
-     * 줄 개행
      * \n 또는 \r\n -> <br>
+     * @param str
+     * @return
      */
     public String nl2br(String str) {
         str = Objects.requireNonNullElse(str, "");
+
         str = str.replaceAll("\\n", "<br>")
                 .replaceAll("\\r", "");
 
@@ -107,16 +109,19 @@ public class Utils {
 
     /**
      * 썸네일 이미지 사이즈 설정
+     *
+     * @return
      */
     public List<int[]> getThumbSize() {
         BasicConfig config = (BasicConfig)request.getAttribute("siteConfig");
         String thumbSize = config.getThumbSize(); // \r\n
-        String[] thumbsSize = thumbSize.split("\\n");  // 자르기
+        String[] thumbsSize = thumbSize.split("\\n");
 
         List<int[]> data = Arrays.stream(thumbsSize)
                 .filter(StringUtils::hasText)
                 .map(s -> s.replaceAll("\\s+", ""))
                 .map(this::toConvert).toList();
+
 
         return data;
     }
@@ -130,12 +135,14 @@ public class Utils {
     }
 
     public String printThumb(long seq, int width, int height, String className) {
-        String[] data = fileInfoService.getThumb(seq, width, height);
-        if (data != null) {
-            String cls = StringUtils.hasText(className) ? " class='" + className + "'" : "";
-            String image = String.format("<img src='%s'%s>", data[1], cls);
-            return image;
-        }
+        try {
+            String[] data = fileInfoService.getThumb(seq, width, height);
+            if (data != null) {
+                String cls = StringUtils.hasText(className) ? " class='" + className + "'" : "";
+                String image = String.format("<img src='%s'%s>", data[1], cls);
+                return image;
+            }
+        } catch (Exception e) {}
 
         return "";
     }
@@ -247,7 +254,7 @@ public class Utils {
     }
 
     /**
-     * 요청 데이터 가져오기 편의 함수
+     * 요청 데이터 가져오기 단일 조회편의 함수
      *
      * @param name
      * @return
@@ -258,6 +265,7 @@ public class Utils {
 
     /**
      * 요청 데이터 복수개 조회 편의 함수
+     *
      * @param name
      * @return
      */
@@ -265,9 +273,11 @@ public class Utils {
         return request.getParameterValues(name);
     }
 
+
     /**
-     * 비회원 uid(Unique ID)
-     *      ip + 브라우저 정보
+     * 비회원 UID(Unique ID)
+     *          IP + 브라우저 정보
+     *
      * @return
      */
     public int guestUid() {
@@ -277,15 +287,14 @@ public class Utils {
         return Objects.hash(ip, ua);
     }
 
-
     /**
-     * 삭제 버튼 클릭시 " 정말 삭제하시겠습니다? "  confirm 대화상자
+     * 삭제 버튼 클릭시 "정말 삭제하시겠습니까?" confirm 대화상자
+     *
      * @return
      */
     public String confirmDelete() {
-
         String message = Utils.getMessage("Confirm.delete.message", "commons");
 
-        return String.format("return confirm('')");
+        return String.format("return confirm('%s');", message);
     }
 }

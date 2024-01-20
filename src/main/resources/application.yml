@@ -48,6 +48,11 @@ spring:
     livereload:
       enabled: true
 
+
+  jackson:
+    serialization:
+      failOnEmptyBeans: false
+
   # 타임리프 설정
   thymeleaf:
     cache: false      # 캐시가 true이면 리로드 작동 안함
