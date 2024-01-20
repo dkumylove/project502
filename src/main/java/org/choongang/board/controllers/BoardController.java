@@ -227,6 +227,8 @@ public class BoardController implements ExceptionProcessor {
        List<String> addCommonCss = new ArrayList<>();  // 공통 css
        List<String> addCss = new ArrayList<>();  // 프론튼, 모바일쪽 css
 
+        addScript.add("board/common");  // 게시판 공통 스크립트
+
        /* 게시판 설정 처리 s */
 //       if(board == null) {
 //           board = configInfoService.get(bid);

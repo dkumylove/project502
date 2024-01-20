@@ -52,3 +52,10 @@
 .comment_items .btns { text-align: right; }
 .comment_items button, .comment_items .btns a { border: 1px solid darkslateblue; background: #fff; height: 35px; padding: 0 15px; color: mediumpurple; cursor: pointer; transition: all 0.5s; border-radius: 3px; display: inline-block; line-height: 33px; }
 .comment_items button:hover, .comment_items .btns a:hover { background: darkslateblue ; color: #fff; }
+
+
+/* 찜버튼 */
+.share_btns button { width: 45px; height: 45px; background: white; border: 1px solid darkslateblue; cursor: pointer;}
+.share_btns button i {font-size: 2rem; color: lavender;}
+.share_btns button.on { border-color: slateblue; }
+.share_btns button.on i { color: slateblue; }
