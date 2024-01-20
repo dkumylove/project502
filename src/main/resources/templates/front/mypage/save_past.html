@@ -1,9 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/mypage}">
 
-<section layout:fragment="content">
+<section layout:fragment="content" class="save_post_page">
     <h1 th:text="#{찜_게시글}"></h1>
+
+    <ul class="items">
+        <li th:if="${items == null || items.isEmpty()}" class="no_data" th:text="#{찜_게시글이_없습니다.}"></li>
+        <li th:unless="${items == null || items.isEmpty()}"
+            th:each="item : ${items}" th:object="${item}">
+            <div class="subject" th:text="*{subject}"></div>
+
+            작성자, 시간
+
+            <div class="content hide">
+                <div>
+                    <th:block th:utext="*{content}"></th:block>
+                    <div class="btns">
+                        <a th:href="@{/board/view/{seq}(seq=*{seq})}" th:text="#{게시글로_이동}"></a>
+                        <button class="save_post on" data-refresh="thue" th:data-seq="*{seq}" th:text="#{찜_해제}"></button>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div>
+
+        검색
+
+    </div>
+
+    <th:block th:replace="~{common/_pagination::pagination}"></th:block>
 </section>
 
 </html>

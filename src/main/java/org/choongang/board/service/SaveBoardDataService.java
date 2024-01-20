@@ -106,10 +106,10 @@ public class SaveBoardDataService {
         int limit = Utils.onlyPositiveNumber(search.getLimit(), 20);
 
         Member member = memberUtil.getMember();
-        Long mSeq = member.getSeq();
+        //Long mSeq = member.getSeq();
 
         //임시
-        //mSeq = 1L;
+        Long mSeq = 1L;
 
         List<Long> bSeqs = saveBoardDataRepository.getBoardDataSeqs(mSeq);
 
