@@ -45,7 +45,7 @@ spring:
     cache: true      # 캐시가 true이면 리로드 작동 안함
     prefix: classpath:/templates/
 
-  #
+  # JSON
   jackson:
     serialization:
       failOnEmptyBeans: false
