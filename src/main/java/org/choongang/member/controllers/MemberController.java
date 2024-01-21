@@ -20,13 +20,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@SessionAttributes("EmailAuthVerified")
+@SessionAttributes("EmailAuthVerified")  // 특정 모델 속성을 세션에 유지하도록 지정
 public class MemberController implements ExceptionProcessor {
 
     private final Utils utils;
-    //private final JoinValidator joinValidator;
     private final JoinService joinService;
-    //private final MemberUtil memberUtil;
     private final FindPwService findPwService;
 
     @GetMapping("/join")
@@ -175,5 +173,10 @@ public class MemberController implements ExceptionProcessor {
         model.addAttribute("addScript", addScript);
         model.addAttribute("addCommonScript", addCommonScript);
     }
+
+
+//    private String MemberDetail(Model model) {
+//
+//    }
 
 }
