@@ -45,14 +45,5 @@ public class Member extends Base {
 
     @Transient  // 내부사용목적
     private FileInfo profileImage;   // path, url
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Follower> followers = new ArrayList<>();
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Following> followings = new ArrayList<>();
-
     
 }

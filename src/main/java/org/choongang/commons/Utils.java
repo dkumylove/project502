@@ -9,6 +9,7 @@ import org.choongang.admin.config.controllers.BasicConfig;
 import org.choongang.admin.config.service.ConfigInfoService;
 import org.choongang.commons.api.BusinessPermit;
 import org.choongang.commons.api.BusinessPermitData;
+import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileInfoService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -149,6 +150,16 @@ public class Utils {
 
     public String printThumb(long seq, int width, int height) {
         return printThumb(seq, width, height, null);
+    }
+
+    public String backgroundStyle(FileInfo file, int width, int height) {
+
+        String[] data = fileInfoService.getThumb(file.getSeq(), width, height);
+        String imageUrl = data[1];
+
+        String style = String.format("background:url('%s') no-repeat center center; background-size:cover;", imageUrl);
+
+        return style;
     }
 
     /**
