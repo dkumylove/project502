@@ -50,7 +50,7 @@ public class BoardController implements ExceptionProcessor {
     public String list(@ModelAttribute BoardSearch search, Model model) {
         commonProcess("list", model);
 
-        ListData<Board> data = configInfoService.getList(search);
+        ListData<Board> data = configInfoService.getList(search, true);
 
         List<Board> items = data.getItems();
         Pagination pagination = data.getPagination();
@@ -145,6 +145,7 @@ public class BoardController implements ExceptionProcessor {
 
         return "admin/board/posts";
     }
+
     /**
      * 공통 처리
      *

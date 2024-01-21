@@ -19,7 +19,7 @@ import java.util.UUID;
 @Table(indexes = {
         @Index(name="idx_boardData_basic", columnList = "notice DESC, createdAt DESC")
 })
-public class BoardData extends Base {
+public class BoardData extends Base implements AuthCheck {
     @Id @GeneratedValue
     private Long seq;
 
@@ -35,7 +35,7 @@ public class BoardData extends Base {
     private String gid = UUID.randomUUID().toString();
 
     @Column(length=60)
-    private String category;  // 분류
+    private String category; // 분류
 
     @Column(length=40, nullable = false)
     private String poster; // 작성자
@@ -53,9 +53,12 @@ public class BoardData extends Base {
 
     private int viewCount; // 조회수
 
+    private int commentCount; // 댓글 수
+
     @Column(length=20)
     private String ip; // IP 주소
 
+    @Column(length=150)
     private String ua; // User-Agent : 브라우저 정보
 
     private Long num1; // 추가 필드 : 정수
@@ -81,8 +84,26 @@ public class BoardData extends Base {
     private String longText3; // 추가 필드 : 여러줄 텍스트
 
     @Transient
-    private List<FileInfo> editorFiles;  //에디터 첨부 파일
+    private List<FileInfo> editorFiles; // 에디터 첨부 파일
 
     @Transient
-    private List<FileInfo> attachFiles;  // 첨부파일
+    private List<FileInfo> attachFiles; // 첨부 파일
+
+    @Transient
+    private boolean editable; // 수정 가능 여부
+
+    @Transient
+    private boolean deletable; // 삭제 가능 여부
+
+    @Transient
+    private boolean mine; // 게시글 소유자
+
+    @Transient
+    private boolean showEditButton; // 수정 버튼 노출 여부
+
+    @Transient
+    private boolean showDeleteButton; // 삭제 버튼 노출 여부
+
+    @Transient
+    private List<CommentData> comments; // 댓글 목록
 }
