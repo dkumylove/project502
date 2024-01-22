@@ -48,15 +48,17 @@ public class BoardSaveService {
             data = new BoardData();
             data.setGid(form.getGid());
             data.setIp(request.getRemoteAddr());
-            data.setUa(request.getHeader("User-Agent"));  // User-Agent : 브라우저 정보
+            data.setUa(request.getHeader("User-Agent"));
             data.setMember(memberUtil.getMember());
 
             Board board = boardRepository.findById(form.getBid()).orElse(null);
             data.setBoard(board);
+            Long parentSeq = form.getParentSeq();
+            data.setParentSeq(parentSeq); // 부모 게시글 번호
 
-            data.setParentSeq(form.getParentSeq()); // 부모 게시글 번호
-
-            long listOrder = System.currentTimeMillis();
+            long listOrder = parentSeq == null ?
+                    System.currentTimeMillis() :
+                    getReplyListOrder(parentSeq);
             data.setListOrder(listOrder);
         }
 
@@ -99,5 +101,30 @@ public class BoardSaveService {
         fileUploadService.processDone(data.getGid());
 
         return data;
+    }
+
+
+    /**
+     * 답글 정렬 순서 번호 listOrder
+     * @param parentSeq
+     * @return
+     */
+    private long getReplyListOrder(Long parentSeq) {
+        BoardData data = boardDataRepository.findById(parentSeq).orElse(null);
+        if (data == null) {
+            return System.currentTimeMillis();
+        }
+
+        /**
+         * 답글이 이미 있는 경우 -> 마지막 답글 순서에서  -1
+         * 답글이 하나도 없는 경우 -> 부모 게시글 순서에서 -1
+         */
+        Long lastListOrder = boardDataRepository.getLastReplyListOrder(parentSeq);
+        if (lastListOrder == null || lastListOrder.longValue() == 0L) { // 답글이 없는 경우
+            return data.getListOrder().longValue() - 1000;
+
+        } else { // 답글이 있는 경우
+            return lastListOrder.longValue() - 1;
+        }
     }
 }

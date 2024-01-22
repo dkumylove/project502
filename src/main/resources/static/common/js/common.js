@@ -16,6 +16,7 @@ commonLib.ajaxLoad = function(method, url, params, responseType) {
 
     return new Promise((resolve, reject) => { // 비동기 순차실행을 가능하게 해줌, resolve는 성공시 reject는 실패시
         const xhr = new XMLHttpRequest();
+
         xhr.open(method, url);
         xhr.setRequestHeader(tokenHeader, token);
 

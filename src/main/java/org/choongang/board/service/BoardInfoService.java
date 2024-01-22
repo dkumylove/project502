@@ -57,10 +57,9 @@ public class BoardInfoService {
 
         addBoardData(boardData);
 
-        // 댓글 목록(2차 가공) - 상세보기 떄만 필요
+        // 댓글 목록
         List<CommentData> comments = commentInfoService.getList(seq);
         boardData.setComments(comments);
-
 
         return boardData;
     }
@@ -184,6 +183,7 @@ public class BoardInfoService {
                 .where(andBuilder)
                 .orderBy(
                         new OrderSpecifier(Order.DESC, pathBuilder.get("notice")),
+                        new OrderSpecifier(Order.DESC, pathBuilder.get("listOrder")),
                         new OrderSpecifier(Order.DESC, pathBuilder.get("createdAt"))
                 )
                 .fetch();
@@ -234,7 +234,6 @@ public class BoardInfoService {
         boardData.setAttachFiles(attachFiles);
         /* 파일 정보 추가 E */
 
-
         /* 수정, 삭제 권한 정보 처리 S */
         boolean editable = false, deletable = false, mine = false;
         Member _member = boardData.getMember(); // null - 비회원, X null -> 회원
@@ -258,7 +257,6 @@ public class BoardInfoService {
         HttpSession session = request.getSession();
         String key = "guest_confirmed_" + boardData.getSeq();
         Boolean guestConfirmed = (Boolean)session.getAttribute(key);
-        //   회원 == null 그리고 게시글정보가 != null 그리고
         if (_member == null && guestConfirmed != null && guestConfirmed) {
             editable = true;
             deletable = true;
@@ -278,7 +276,6 @@ public class BoardInfoService {
         boardData.setShowDeleteButton(showDeleteButton);
 
         /* 수정, 삭제 권한 정보 처리 E */
-
 
         /* 댓글 작성 권한 처리 S */
         boolean commentable = false;
