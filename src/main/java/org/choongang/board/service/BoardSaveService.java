@@ -53,6 +53,11 @@ public class BoardSaveService {
 
             Board board = boardRepository.findById(form.getBid()).orElse(null);
             data.setBoard(board);
+
+            data.setParentSeq(form.getParentSeq()); // 부모 게시글 번호
+
+            long listOrder = System.currentTimeMillis();
+            data.setListOrder(listOrder);
         }
 
         data.setPoster(form.getPoster());
