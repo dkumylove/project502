@@ -46,9 +46,9 @@ commonLib.ajaxLoad = function(method, url, params, responseType) {
             reject(err); // 요청 또는 응답 시 오류 발생
         };
 
-        xhr.ontimeout = function(err) {
+        /*xhr.ontimeout = function(err) {
             reject(err);
-        };
+        };*/
     });
 };
 
