@@ -6,13 +6,15 @@ import org.choongang.board.entities.BoardData;
 import org.choongang.board.service.SaveBoardDataService;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.ListData;
+import org.choongang.commons.RequestPaging;
 import org.choongang.commons.Utils;
+import org.choongang.member.entities.Member;
+import org.choongang.member.service.follow.FollowBoardService;
+import org.choongang.member.service.follow.FollowService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,9 @@ import java.util.List;
 public class MypageController implements ExceptionProcessor {
 
     private final SaveBoardDataService saveBoardDataService;
+    private final FollowBoardService followBoardService;
+    private final FollowService followService;
+
     private final Utils utils;
 
 
@@ -52,6 +57,53 @@ public class MypageController implements ExceptionProcessor {
         return utils.tpl("mypage/save_post");
     }
 
+    @GetMapping("/follow")
+    public String followList(@RequestParam(name="mode", defaultValue = "follower") String mode, RequestPaging paging, Model model) {
+        commonProcess("follow", model);
+
+        ListData<Member> data = followService.getList(mode, paging);
+
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
+        model.addAttribute("mode", mode);
+
+        return utils.tpl("mypage/follow");
+    }
+
+
+    /**
+     * follow
+     * @param userId
+     * @param mode
+     * @param search
+     * @param model
+     * @return
+     */
+    @GetMapping("/follow/{userId}")
+    public String followBoard(@PathVariable("userId") String userId,
+                              @RequestParam(name="mode", defaultValue="follower") String mode,
+                              @ModelAttribute BoardDataSearch search, Model model) {
+
+        // 전체 조회가 아니라면 아이디별 조회
+        if (!userId.equals("all")) {
+            search.setUserId(userId);
+        } else {
+            search.setUserId(null);
+        }
+
+        ListData<BoardData> data = followBoardService.getList(mode, search);
+
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
+
+        return utils.tpl("mypage/follow_board");
+    }
+
+    /**
+     * 공통기능
+     * @param mode
+     * @param model
+     */
     private void commonProcess(String mode, Model model) {
         mode = StringUtils.hasText(mode) ? mode : "main";
         String pageTitle = Utils.getMessage("마이페이지", "commons");
@@ -59,16 +111,21 @@ public class MypageController implements ExceptionProcessor {
         List<String> addCss = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
 
+        List<String> addCommonScript = new ArrayList<>();
+
+
         if (mode.equals("save_post")) { // 찜한 게시글 페이지
             pageTitle = Utils.getMessage("찜_게시글", "commons");
 
             addScript.add("board/common");
             addScript.add("mypage/save_post");
+        } else if (mode.equals("follow")) {
+            addCommonScript.add("follow");
         }
 
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addCss", addCss);
         model.addAttribute("addScript", addScript);
+        model.addAttribute("addCommonScript", addCommonScript);
     }
-
 }
