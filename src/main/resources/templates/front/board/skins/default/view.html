@@ -40,6 +40,7 @@
             </div>
         </div>
         <!--// post_info -->
+
         <div th:if="*{editorView}" class="content" th:utext="*{content}"></div>
         <div th:if="*{!editorView}" class="content" th:utext="*{@utils.nl2br(content)}"></div>
 

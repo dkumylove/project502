@@ -55,7 +55,7 @@ public class BoardData extends Base implements AuthCheck {
 
     private int commentCount; // 댓글 수
 
-    private boolean editorView;  // true : 에디터를 통해서 작성
+    private boolean editorView; // true : 에디터를 통해서 작성
 
     @Column(length=20)
     private String ip; // IP 주소

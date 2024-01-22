@@ -7,7 +7,7 @@ var commonLib = commonLib || {}; // 파일 속성값으로 namespace를 정할 �
  * @param params : 요청 데이터 -> post, put patch..(바디 쪽에 실릴 데이터)
  * @param responseType : json -> JSON형태 (자바스크립트 객체)로 변환
  */
-commonLib.ajaxLoad = function(method, url, params, responseType){
+commonLib.ajaxLoad = function(method, url, params, responseType) {
     method = method || "GET";
     params = params || null;
 
@@ -19,16 +19,12 @@ commonLib.ajaxLoad = function(method, url, params, responseType){
         xhr.open(method, url);
         xhr.setRequestHeader(tokenHeader, token);
 
-        try {
-            xhr.send(params); // 요청 바디에 실릴 데이터를 넣어줌 형식은 쿼리스트링(키=값)도 가능, formdata 객체(post, patch, put) 형태도 가능
-        } catch (err) {
-            reject(err);
-        }
+        xhr.send(params); // 요청 바디에 실릴 데이터를 넣어줌 형식은 쿼리스트링(키=값)도 가능, formdata 객체(post, patch, put) 형태도 가능
 
-        responseType = responseType?responseType.toLowerCase():undefined;
+        /* responseType = responseType?responseType.toLowerCase():undefined;
         if (responseType == 'json') {
             xhr.responseType=responseType;
-        }
+        } */
 
 
         xhr.onreadystatechange = function(){
