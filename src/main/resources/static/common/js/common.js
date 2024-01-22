@@ -19,7 +19,11 @@ commonLib.ajaxLoad = function(method, url, params, responseType){
         xhr.open(method, url);
         xhr.setRequestHeader(tokenHeader, token);
 
-        xhr.send(params); // 요청 바디에 실릴 데이터를 넣어줌 형식은 쿼리스트링(키=값)도 가능, formdata 객체(post, patch, put) 형태도 가능
+        try {
+            xhr.send(params); // 요청 바디에 실릴 데이터를 넣어줌 형식은 쿼리스트링(키=값)도 가능, formdata 객체(post, patch, put) 형태도 가능
+        } catch (err) {
+            reject(err);
+        }
 
         responseType = responseType?responseType.toLowerCase():undefined;
         if (responseType == 'json') {

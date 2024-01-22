@@ -11,8 +11,9 @@ window.addEventListener("DOMContentLoaded", function() {
         location.hash=`#comment_${seq}`;
     }
 
+
     /* 댓글 수정 버튼 클릭 처리 S */
-    const editComments = document.getElementsByClassName("edit_comment");
+    /*const editComments = document.getElementsByClassName("edit_comment");
     const { ajaxLoad } = commonLib;
     for (const el of editComments) {
         el.addEventListener("click", function() {
@@ -65,17 +66,19 @@ window.addEventListener("DOMContentLoaded", function() {
                                 targetEl.appendChild(passwordBox);
                                 targetEl.appendChild(button);
 
-                                const guestPw = passwordBox.value.trim();
-                                if (!guestPw) {
-                                    alert("비밀번호를 입력하세요.");
-                                    passwordBox.focus();
-                                    return;
-                                }
 
                                 button.addEventListener("click", function() {
 
+                                    const guestPw = passwordBox.value.trim();
+                                    if (!guestPw) {
+                                        alert("비밀번호를 입력하세요.");
+                                        passwordBox.focus();
+                                        return;
+                                    }
+
                                     ajaxLoad("GET", `/api/comment/auth_check?seq=${seq}&guestPw=${guestPw}`, null, 'json')
                                         .then(res => {
+                                            console.log(res);
                                             console.log("여기...");
                                             //targetEl.innerHTML = "";
                                             //textArea.value = data.content;
@@ -84,10 +87,10 @@ window.addEventListener("DOMContentLoaded", function() {
                                         })
                                         .catch(err => console.error(err));
                                 });
+                            } else {
+                                textArea.value = data.content;
+                                targetEl.appendChild(textArea);
                             }
-
-                            textArea.value = data.content;
-                            targetEl.appendChild(textArea);
 
                         }
                     })
@@ -101,10 +104,10 @@ window.addEventListener("DOMContentLoaded", function() {
                         console.log(data.data);
                     })
                     .catch(err => console.error(err));
-                    */
+                    /
             }
 
         });
-    }
+    } */
     /* 댓글 수정 버튼 클릭 처리 E */
 });
