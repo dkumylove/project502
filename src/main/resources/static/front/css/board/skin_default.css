@@ -34,6 +34,15 @@
 .board_list .list_search button { width: 180px; }
 .board_list .total { text-align: right; margin: 10px 10px 5px; }
 
+.board_list .depth1 { text-indent: 0; }
+.board_list .depth2 { text-indent: 20px; }
+.board_list .depth3 { text-indent: 40px; }
+.board_list .depth4 { text-indent: 60px; }
+.board_list .depth5 { text-indent: 80px; }
+.board_list .depth6 { text-indent: 100px; }
+.board_list .depth7 { text-indent: 120px; }
+.board_list .depth8 { text-indent: 140px; }
+
 /* 댓글 */
 #frmComment { margin: 20px 0 30px; }
 .commenter_info { margin-bottom: 5px; }
@@ -59,3 +68,9 @@
 .share_btns button i { font-size: 2rem; color: lavender; }
 .share_btns button.on { border-color: darkslateblue; }
 .share_btns button.on i { color: darkslateblue; }
+
+/* 게시글 통합 검색 상단 */
+#search_top { width: 450px; display: flex; margin: 30px auto 50px; }
+#search_top select { width: 150px; }
+#search_top button { width: 150px; cursor: pointer; }
+#search_top input[type='text'] { flex-grow: 1; margin: 0 5px; }

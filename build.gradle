@@ -59,6 +59,9 @@ dependencies {
 	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
 	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
+	/* 채팅 */
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 	/* modelMapper */
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 

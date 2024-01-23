@@ -7,7 +7,7 @@ var commonLib = commonLib || {}; // 파일 속성값으로 namespace를 정할 �
  * @param params : 요청 데이터 -> post, put patch..(바디 쪽에 실릴 데이터)
  * @param responseType : json -> JSON형태 (자바스크립트 객체)로 변환
  */
-commonLib.ajaxLoad = function(method, url, params, responseType){
+commonLib.ajaxLoad = function(method, url, params, responseType) {
     method = method || "GET";
     params = params || null;
 
@@ -16,23 +16,30 @@ commonLib.ajaxLoad = function(method, url, params, responseType){
 
     return new Promise((resolve, reject) => { // 비동기 순차실행을 가능하게 해줌, resolve는 성공시 reject는 실패시
         const xhr = new XMLHttpRequest();
+
         xhr.open(method, url);
         xhr.setRequestHeader(tokenHeader, token);
 
         xhr.send(params); // 요청 바디에 실릴 데이터를 넣어줌 형식은 쿼리스트링(키=값)도 가능, formdata 객체(post, patch, put) 형태도 가능
 
-        responseType = responseType?responseType.toLowerCase():undefined;
+        /*responseType = responseType?responseType.toLowerCase():undefined;
         if (responseType == 'json') {
             xhr.responseType=responseType;
-        }
+        }*/
 
 
-        xhr.onreadystatechange = function(){
-            if(xhr.status == 200 && xhr.readyState == XMLHttpRequest.DONE){
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
                 // 제이슨이면 자바스크립트로 바꾸고,, 아닐때는 문자열 형태로
                 // 바꾸는 과정
-                const resData = ( responseType && responseType.toLowerCase() ==='json' ) ? xhr.response : xhr.responseText;
-                resolve(resData); // 성공시 데이터
+                const resData = (responseType && responseType.toLowerCase() == 'json') ? JSON.parse(xhr.responseText) : xhr.responseText;
+
+                if (xhr.status == 200) {
+
+                    resolve(resData); // 성공시 응답 데이터
+                } else {
+                    reject(resData);
+                }
             }
         };
 
@@ -42,13 +49,13 @@ commonLib.ajaxLoad = function(method, url, params, responseType){
             reject(err); // 중단 시
         };
 
-        xhr.onerror = function(err){
-            reject(err); // 요청 또는 응답 시 오류 발생
+        xhr.onerror = function(err) {
+            reject(err); // 요청 또는 응답시 오류 발생
         };
 
-        xhr.ontimeout = function(err) {
+        /*xhr.ontimeout = function(err) {
             reject(err);
-        };
+        };*/
     });
 };
 
