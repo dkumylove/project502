@@ -34,6 +34,15 @@
 .board_list .list_search button { width: 180px; }
 .board_list .total { text-align: right; margin: 10px 10px 5px; }
 
+.board_list .depth1 { text-indent: 0; }
+.board_list .depth2 { text-indent: 20px; }
+.board_list .depth3 { text-indent: 40px; }
+.board_list .depth4 { text-indent: 60px; }
+.board_list .depth5 { text-indent: 80px; }
+.board_list .depth6 { text-indent: 100px; }
+.board_list .depth7 { text-indent: 120px; }
+.board_list .depth8 { text-indent: 140px; }
+
 /* 댓글 */
 #frmComment { margin: 20px 0 30px; }
 .commenter_info { margin-bottom: 5px; }
