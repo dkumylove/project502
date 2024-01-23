@@ -105,8 +105,7 @@ public class BoardInfoService {
      * @return
      */
     public ListData<BoardData> getList(String bid, BoardDataSearch search) {
-
-        Board board = configInfoService.get(bid);
+        Board board = StringUtils.hasText(bid) ? configInfoService.get(bid) : new Board();
 
         int page = Utils.onlyPositiveNumber(search.getPage(), 1);
         int limit = Utils.onlyPositiveNumber(search.getLimit(), board.getRowsPerPage());
@@ -115,7 +114,9 @@ public class BoardInfoService {
         QBoardData boardData = QBoardData.boardData;
         BooleanBuilder andBuilder = new BooleanBuilder();
 
-        andBuilder.and(boardData.board.bid.eq(bid)); // 게시판 ID
+        if (StringUtils.hasText(bid)) {
+            andBuilder.and(boardData.board.bid.eq(bid)); // 게시판 ID
+        }
 
         /* 검색 조건 처리 S */
 
@@ -197,6 +198,16 @@ public class BoardInfoService {
         Pagination pagination = new Pagination(page, (int)total, ranges, limit, request);
 
         return new ListData<>(items, pagination);
+    }
+
+    /**
+     * 게시글 번호없이도 게시글을 조회할수 있는
+     * @param search
+     * @return
+     */
+    public ListData<BoardData> getList(BoardDataSearch search) {
+
+        return getList(null, search);
     }
 
     /**
