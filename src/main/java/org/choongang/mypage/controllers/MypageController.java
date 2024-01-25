@@ -1,5 +1,6 @@
 package org.choongang.mypage.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.board.controllers.BoardDataSearch;
 import org.choongang.board.entities.BoardData;
@@ -8,12 +9,17 @@ import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.ListData;
 import org.choongang.commons.RequestPaging;
 import org.choongang.commons.Utils;
+import org.choongang.file.entities.FileInfo;
+import org.choongang.file.service.FileInfoService;
+import org.choongang.member.MemberUtil;
 import org.choongang.member.entities.Member;
+import org.choongang.member.service.MemberUpdateService;
 import org.choongang.member.service.follow.FollowBoardService;
 import org.choongang.member.service.follow.FollowService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,9 +30,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MypageController implements ExceptionProcessor {
 
+    private final FileInfoService fileInfoService;
     private final SaveBoardDataService saveBoardDataService;
     private final FollowBoardService followBoardService;
     private final FollowService followService;
+
+    private final MemberUpdateService memberUpdateService;
+    private final ProfileValidator profileValidator;
+
+    private final MemberUtil memberUtil;
 
     private final Utils utils;
 
@@ -71,14 +83,6 @@ public class MypageController implements ExceptionProcessor {
     }
 
 
-    /**
-     * follow
-     * @param userId
-     * @param mode
-     * @param search
-     * @param model
-     * @return
-     */
     @GetMapping("/follow/{userId}")
     public String followBoard(@PathVariable("userId") String userId,
                               @RequestParam(name="mode", defaultValue="follower") String mode,
@@ -99,11 +103,38 @@ public class MypageController implements ExceptionProcessor {
         return utils.tpl("mypage/follow_board");
     }
 
-    /**
-     * 공통기능
-     * @param mode
-     * @param model
-     */
+    @GetMapping("/profile")
+    public String profile(@ModelAttribute RequestProfile form, Model model) {
+        commonProcess("profile", model);
+
+        Member member = memberUtil.getMember();
+        form.setName(member.getName());
+        form.setProfileImage(member.getProfileImage());
+
+        return utils.tpl("mypage/profile");
+    }
+
+    @PostMapping("/profile")
+    public String updateProfile(@Valid RequestProfile form, Errors errors, Model model) {
+        commonProcess("profile", model);
+
+        profileValidator.validate(form, errors);
+
+        if (errors.hasErrors()) {
+
+            String gid = memberUtil.getMember().getGid();
+            List<FileInfo> profileImages = fileInfoService.getList(gid);
+
+            form.setProfileImage(profileImages.get(0));
+
+            return utils.tpl("mypage/profile");
+        }
+
+        memberUpdateService.update(form);
+
+        return "redirect:/mypage";
+    }
+
     private void commonProcess(String mode, Model model) {
         mode = StringUtils.hasText(mode) ? mode : "main";
         String pageTitle = Utils.getMessage("마이페이지", "commons");
@@ -121,6 +152,11 @@ public class MypageController implements ExceptionProcessor {
             addScript.add("mypage/save_post");
         } else if (mode.equals("follow")) {
             addCommonScript.add("follow");
+
+        } else if (mode.equals("profile")) {
+            pageTitle = Utils.getMessage("회원정보_수정", "commons");
+            addCommonScript.add("fileManager");
+            addScript.add("mypage/profile");
         }
 
         model.addAttribute("pageTitle", pageTitle);
