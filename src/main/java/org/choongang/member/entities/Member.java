@@ -45,5 +45,7 @@ public class Member extends Base {
 
     @Transient  // 내부사용목적
     private FileInfo profileImage;   // path, url
+
+    private boolean enabled = true;  // false 인 경우 탈퇴 처리
     
 }

@@ -33,6 +33,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath email = createString("email");
 
+    public final BooleanPath enabled = createBoolean("enabled");
+
     public final StringPath gid = createString("gid");
 
     //inherited
