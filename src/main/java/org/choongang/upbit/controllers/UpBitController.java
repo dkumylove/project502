@@ -16,6 +16,10 @@ public class UpBitController {
 
     @GetMapping("/main")
     public String index(Model model) {
+//        List<String> addCommonScript = new ArrayList<>();
+//        addCommonScript.add("upbit");
+//
+//        model.addAttribute("addCommonScript",addCommonScript);
 
         model.addAttribute("addCommonScript", new String[] {"upbit"});
 
