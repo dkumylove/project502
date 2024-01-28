@@ -3,6 +3,20 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 <main layout:fragment="content">
-    업비트페이지
+
+    차트페이지
+
+    <!-- 차트 구현이 필요한 페이지에 라이브러리 추가 -->
+    <th:block layout:fragment="addCommonScript">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    </th:block>
+
+    <select id="select_market">
+    </select>
+
+    <!--<div id="upbit_cart"></div>-->
+
+    <canvas id="upbit_cart"></canvas>
+
 </main>
 </html>
