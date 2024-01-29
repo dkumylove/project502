@@ -23,7 +23,7 @@ public class EmailSendService {
     /**
      * 메일 전송
      *
-     * @param message : 수신인, 메일 제목, 메일 내용
+     * @param message : 수신인, 메일 제목, 메일 내용ㅈ
      * @param tpl : 템플릿 사용하는 경우 템플릿 이름
      * @param tplData : 치환코드
      * @return
@@ -45,7 +45,7 @@ public class EmailSendService {
             context.setVariables(tplData);
 
             text = templateEngine.process("email/" + tpl, context);
-        } else { // 템플릿 전송이 아닌 경우 메세지로 대체
+        }  else { // 템플릿 전송이 아닌 경우 메세지로 대체
             text = message.message();
         }
 

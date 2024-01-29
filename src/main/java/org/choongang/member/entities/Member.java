@@ -47,5 +47,8 @@ public class Member extends Base {
     private FileInfo profileImage;   // path, url
 
     private boolean enabled = true;  // false 인 경우 탈퇴 처리
+
+    @Column(name = "_lock")  // lock = 예약어
+    private boolean lock = false;
     
 }
