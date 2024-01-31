@@ -232,6 +232,8 @@ public class MypageController implements ExceptionProcessor {
             addScript.add("mypage/profile");
         } else if (mode.equals("resign")) {
             pageTitle = Utils.getMessage("회원_탈퇴", "commons");
+        } else if (mode.equals("main")) {  // 마이페이지 메인 ( 최근 게시물)
+            addScript.add("board/view_posts");
         }
 
         model.addAttribute("pageTitle", pageTitle);
