@@ -7,7 +7,7 @@ var commonLib = commonLib || {}; // 파일 속성값으로 namespace를 정할 �
  * @param params : 요청 데이터 -> post, put patch..(바디 쪽에 실릴 데이터)
  * @param responseType : json -> JSON형태 (자바스크립트 객체)로 변환
  */
-commonLib.ajaxLoad = function(method, url, params, responseType) {
+commonLib.ajaxLoad = function(method, url, params, responseType, headers) {
     method = method || "GET";
     params = params || null;
 
@@ -19,6 +19,12 @@ commonLib.ajaxLoad = function(method, url, params, responseType) {
 
         xhr.open(method, url);
         xhr.setRequestHeader(tokenHeader, token);
+
+        if (headers) {
+            for (const key in headers) {
+                xhr.setRequestHeader(key, headers[key]);
+            }
+        }
 
         xhr.send(params); // 요청 바디에 실릴 데이터를 넣어줌 형식은 쿼리스트링(키=값)도 가능, formdata 객체(post, patch, put) 형태도 가능
 
@@ -32,9 +38,9 @@ commonLib.ajaxLoad = function(method, url, params, responseType) {
             if (xhr.readyState == XMLHttpRequest.DONE) {
                 // 제이슨이면 자바스크립트로 바꾸고,, 아닐때는 문자열 형태로
                 // 바꾸는 과정
-                const resData = (responseType && responseType.toLowerCase() == 'json') ? JSON.parse(xhr.responseText) : xhr.responseText;
+                const resData = (xhr.responseText.trim() && responseType && responseType.toLowerCase() == 'json') ? JSON.parse(xhr.responseText) : xhr.responseText;
 
-                if (xhr.status == 200) {
+                if (xhr.status == 200 || xhr.status == 201) {
 
                     resolve(resData); // 성공시 응답 데이터
                 } else {
