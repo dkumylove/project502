@@ -1,17 +1,17 @@
 package org.choongang.chatting.controllers;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class RequestChatRoom {
+public class RequestChatHistory {
+
     @NotBlank
     private String roomId;
 
     @NotBlank
-    private String roomNm;
+    private String nickName;
 
-    @Min(2)
-    private int capacity = 2;
+    @NotBlank
+    private String massage;
 }
