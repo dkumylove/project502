@@ -12,7 +12,7 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
+@Configuration  // 설정클래스임을 알려줌
 @EnableJpaAuditing
 @EnableScheduling
 @EnableConfigurationProperties(FileProperties.class)
@@ -30,8 +30,10 @@ public class MvcConfig implements WebMvcConfigurer {
 //        registry.addViewController("/").setViewName("front/main/index");
 //    }
 
+
     /**
      * 정적 경로 설정
+     * 정적자원에 바로 접근하게하는
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -40,7 +42,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
         // 정적 경로
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations("classpath:/static/"); // css,js등의 파일들접근경로
     }
 
     /**
@@ -51,11 +53,16 @@ public class MvcConfig implements WebMvcConfigurer {
     public MessageSource messageSource() {
         ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
         ms.setDefaultEncoding("UTF-8");
+        ms.setUseCodeAsDefaultMessage(true);  // 메세지코드x -> 코드 그 상태로 출력
         ms.setBasenames("messages.commons", "messages.validations", "messages.errors");
 
         return ms;
     }
 
+    /**
+     * 일반form에서 patch,put,delete 사용가능하게 해줌
+     * @return
+     */
     @Bean
     public HiddenHttpMethodFilter httpMethodFilter() {
         return new HiddenHttpMethodFilter();

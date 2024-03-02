@@ -38,6 +38,13 @@ public class MemberInfoService implements UserDetailsService {
     private final HttpServletRequest request;
     private final EntityManager em;
 
+    /**
+     * 반듯이 구현해야하는 것
+     *
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -45,6 +52,7 @@ public class MemberInfoService implements UserDetailsService {
                 .orElseGet(() -> memberRepository.findByUserId(username) // 아이디로 조회
                         .orElseThrow(() -> new UsernameNotFoundException(username)));
 
+        // 권한설정
         List<SimpleGrantedAuthority> authorities = null;
         List<Authorities> tmp = member.getAuthorities();
         if (tmp != null) {
