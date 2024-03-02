@@ -59,7 +59,7 @@ public class Utils {
         }
 
         // 요청 헤더 : User-Agent
-        String ua = request.getHeader("User-Agent");
+        String ua = request.getHeader("User-Agent");  // 디바이스, 브라우저 사용자 소프트웨어 식별
 
         String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*";
 
@@ -103,7 +103,7 @@ public class Utils {
         str = Objects.requireNonNullElse(str, "");
 
         str = str.replaceAll("\\n", "<br>")
-                .replaceAll("\\r", "");
+                .replaceAll("\\r", "");  // 윈도우즈에만 있음
 
         return str;
     }

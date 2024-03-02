@@ -26,6 +26,7 @@ public interface PasswordValidator {
 
     /**
      * 비밀번호에 숫자 포함여부
+     * \d = 숫자를 의미함
      * @param password
      * @return
      */

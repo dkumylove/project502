@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
  * Rest 컨트롤러 예외처리
+ * 응답이 페이지가 아닌 json방식으로 반응
  */
 public interface ExceptionRestProcessor {
 

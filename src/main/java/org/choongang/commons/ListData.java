@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * List 와 Pagination
+ * @param <T>
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
