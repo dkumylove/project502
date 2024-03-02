@@ -32,7 +32,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // 회원 서비스 페이지로 이동
         String redirectURL = request.getParameter("redirectURL");
-        redirectURL = StringUtils.hasText(redirectURL) ? redirectURL : "/";
+        redirectURL = StringUtils.hasText(redirectURL) ? redirectURL : "/"; // url이 있으면 그 페이지로 없으면 메인페이지로 이동
 
         response.sendRedirect(request.getContextPath() + redirectURL);
     }

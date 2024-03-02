@@ -23,6 +23,7 @@ public class SecurityConfig {
 
     /**
      * 설정 무력화
+     * + 인가 설정
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -32,8 +33,8 @@ public class SecurityConfig {
             f.loginPage("/member/login")
                     .usernameParameter("username")
                     .passwordParameter("password")
-                    .successHandler(new LoginSuccessHandler())
-                    .failureHandler(new LoginFailurdHandler());
+                    .successHandler(new LoginSuccessHandler())  // 성공시
+                    .failureHandler(new LoginFailurdHandler());  // 실페시
         });
 
         http.logout(c -> {

@@ -42,12 +42,12 @@ public class MemberInfo implements UserDetails {
     @Override
     public boolean isAccountNonExpired() {
         return true;
-    }
+    }  // 회원차단할때 사용할떄도 사용
 
     @Override
     public boolean isAccountNonLocked() {
         return !lock;
-    }
+    }  // 비번 오래되었을떄 비번 바꾸라고 할때 사용
 
     @Override
     public boolean isCredentialsNonExpired() {
@@ -56,6 +56,7 @@ public class MemberInfo implements UserDetails {
 
     /**
      * 회원탈되하는 부분
+     * 탈퇴한다고 회원정보를 삭제하는것이아닌 비활성화하는 것이 필요
      * @return
      */
     @Override

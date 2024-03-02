@@ -13,11 +13,20 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Arrays;
 
+
 @Component
 @RequiredArgsConstructor
 public class CommonInterceptor implements HandlerInterceptor {
     private final ConfigInfoService infoService;
 
+    /**
+     * 컨트롤러(핸들러) 객체를 실행하기 전에 필요한 기능을 구현할때 사용
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -25,7 +34,7 @@ public class CommonInterceptor implements HandlerInterceptor {
         clearLoginData(request);
         loadSiteConfig(request);
 
-        return true;
+        return true;  //false이면 실행 안됨
     }
 
     /**
